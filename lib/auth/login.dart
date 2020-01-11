@@ -1,8 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:math_cow/utils/fade_animation.dart';
 
-class LogIn extends StatelessWidget {
+class LogIn extends StatefulWidget {
   @override
+  _LogInState createState() => _LogInState();
+}
+
+class _LogInState extends State<LogIn> {
+  final formKey = GlobalKey<FormState>();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  String _email;
+  String _password;
+
+  void _submitCommand() {
+    final form = formKey.currentState;
+
+    if (form.validate()) {
+      form.save();
+
+      // Email & password matched our validation rules
+      // and are saved to _email and _password fields.
+      _loginCommand();
+    }
+  }
+
+  void _loginCommand() {
+    // This is just a demo, so no actual login here.
+    final snackbar = SnackBar(
+      content: Text('Email: $_email, password: $_password'),
+    );
+
+    scaffoldKey.currentState.showSnackBar(snackbar);
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
@@ -40,73 +71,79 @@ class LogIn extends StatelessWidget {
                     borderRadius: BorderRadius.circular(40)),
                 child: Padding(
                   padding: EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Color.fromRGBO(225, 95, 27, .3),
-                                  blurRadius: 15,
-                                  offset: Offset(0, 5))
-                            ]),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom:
-                                          BorderSide(color: Colors.grey[200]))),
-                              child: TextField(
-                                style: TextStyle(color: Colors.black54),
-                                decoration: InputDecoration(
-                                    hintText: "User Name",
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    border: InputBorder.none),
+                  child: Form(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Color.fromRGBO(225, 95, 27, .3),
+                                    blurRadius: 15,
+                                    offset: Offset(0, 5))
+                              ]),
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: Colors.grey[200]))),
+                                child: TextFormField(
+                                  autofocus: true,
+                                  style: TextStyle(color: Colors.black54),
+                                  decoration: InputDecoration(
+                                      hintText: "User Name",
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none),
+                                ),
                               ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom:
-                                          BorderSide(color: Colors.grey[200]))),
-                              child: TextField(
-                                style: TextStyle(color: Colors.black54),
-                                decoration: InputDecoration(
-                                    hintText: "Email",
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    border: InputBorder.none),
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: Colors.grey[200]))),
+                                child: TextFormField(
+                                  autofocus: true,
+                                  keyboardType: TextInputType.emailAddress,
+                                  style: TextStyle(color: Colors.black54),
+                                  decoration: InputDecoration(
+                                      hintText: "Email",
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none),
+                                ),
                               ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      bottom:
-                                          BorderSide(color: Colors.grey[200]))),
-                              child: TextField(
-                                obscureText: true,
-                                style: TextStyle(color: Colors.black54),
-                                decoration: InputDecoration(
-                                    hintText: "Password",
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    border: InputBorder.none),
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: Colors.grey[200]))),
+                                child: TextFormField(
+                                  autofocus: true,
+                                  obscureText: true,
+                                  style: TextStyle(color: Colors.black54),
+                                  decoration: InputDecoration(
+                                      hintText: "Password",
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      Text(
-                        "Forgot Password?",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      _withRoundedRectangleBorder()
-                    ],
+                        Text(
+                          "Forgot Password?",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        _withRoundedRectangleBorder()
+                      ],
+                    ),
                   ),
                 ),
               ),

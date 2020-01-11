@@ -7,8 +7,8 @@ class BottomNavBar extends StatelessWidget {
 
   final List<TabItem> items = <TabItem>[
     //3 or 5
-    TabItem(icon: Icons.format_list_bulleted, title: 'Topics'),
-    TabItem(icon: Icons.map, title: 'Discovery'),
+    TabItem(icon: Icons.games, title: 'Topics'),
+    TabItem(icon: Icons.whatshot, title: 'Motivation'),
     TabItem(icon: Icons.face, title: 'Profile')
   ];
 
