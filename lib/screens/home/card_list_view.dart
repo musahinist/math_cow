@@ -153,7 +153,7 @@ class CardListView extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.deepOrange[300],
+          color: Colors.black26,
           borderRadius: BorderRadius.circular(5.0),
         ),
         padding: const EdgeInsets.all(20.0),
@@ -183,7 +183,7 @@ class CardListView extends StatelessWidget {
         45,
         20,
       ),
-      color: Colors.deepOrange[300],
+      color: Colors.black26,
       child: Text("Continue"),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50),

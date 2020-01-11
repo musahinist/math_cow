@@ -7,32 +7,32 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
-  final formKey = GlobalKey<FormState>();
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  String _name;
   String _email;
   String _password;
+  bool _validate = false;
+  // void _submitCommand() {
+  //   final form = formKey.currentState;
 
-  void _submitCommand() {
-    final form = formKey.currentState;
+  //   if (form.validate()) {
+  //     form.save();
 
-    if (form.validate()) {
-      form.save();
+  //     // Email & password matched our validation rules
+  //     // and are saved to _email and _password fields.
+  //     _loginCommand();
+  //   }
+  // }
 
-      // Email & password matched our validation rules
-      // and are saved to _email and _password fields.
-      _loginCommand();
-    }
-  }
+  // void _loginCommand() {
+  //   // This is just a demo, so no actual login here.
+  //   final snackbar = SnackBar(
+  //     content: Text('Email: $_email, password: $_password'),
+  //   );
 
-  void _loginCommand() {
-    // This is just a demo, so no actual login here.
-    final snackbar = SnackBar(
-      content: Text('Email: $_email, password: $_password'),
-    );
-
-    scaffoldKey.currentState.showSnackBar(snackbar);
-  }
+  //   scaffoldKey.currentState.showSnackBar(snackbar);
+  // }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,9 +42,9 @@ class _LogInState extends State<LogIn> {
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-                begin: Alignment.topCenter,
+                begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [Colors.purpleAccent, Colors.teal[300]]),
+                colors: [Colors.teal[300], Colors.pink[300]]),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,13 +65,15 @@ class _LogInState extends State<LogIn> {
 
               Container(
                 margin: const EdgeInsets.all(10),
-                height: MediaQuery.of(context).size.height * 0.6,
+                height: MediaQuery.of(context).size.height * 0.7,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(40)),
                 child: Padding(
                   padding: EdgeInsets.all(20),
                   child: Form(
+                    autovalidate: _validate,
+                    key: _formKey,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
@@ -90,16 +92,24 @@ class _LogInState extends State<LogIn> {
                               Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Colors.grey[200]))),
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: Colors.grey[200],
+                                    ),
+                                  ),
+                                ),
                                 child: TextFormField(
-                                  autofocus: true,
                                   style: TextStyle(color: Colors.black54),
                                   decoration: InputDecoration(
-                                      hintText: "User Name",
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      border: InputBorder.none),
+                                    hintText: "User Name",
+                                    hintStyle: TextStyle(color: Colors.grey),
+                                    border: InputBorder.none,
+                                  ),
+                                  maxLength: 15,
+                                  validator: validateName,
+                                  onSaved: (String val) {
+                                    _name = val;
+                                  },
                                 ),
                               ),
                               Container(
@@ -109,14 +119,18 @@ class _LogInState extends State<LogIn> {
                                         bottom: BorderSide(
                                             color: Colors.grey[200]))),
                                 child: TextFormField(
-                                  autofocus: true,
-                                  keyboardType: TextInputType.emailAddress,
-                                  style: TextStyle(color: Colors.black54),
-                                  decoration: InputDecoration(
-                                      hintText: "Email",
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      border: InputBorder.none),
-                                ),
+                                    keyboardType: TextInputType.emailAddress,
+                                    style: TextStyle(color: Colors.black54),
+                                    decoration: InputDecoration(
+                                        hintText: "Email",
+                                        hintStyle:
+                                            TextStyle(color: Colors.grey),
+                                        border: InputBorder.none),
+                                    maxLength: 32,
+                                    validator: validateEmail,
+                                    onSaved: (String val) {
+                                      _email = val;
+                                    }),
                               ),
                               Container(
                                 padding: const EdgeInsets.all(10),
@@ -125,13 +139,13 @@ class _LogInState extends State<LogIn> {
                                         bottom: BorderSide(
                                             color: Colors.grey[200]))),
                                 child: TextFormField(
-                                  autofocus: true,
                                   obscureText: true,
                                   style: TextStyle(color: Colors.black54),
                                   decoration: InputDecoration(
                                       hintText: "Password",
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder.none),
+                                  validator: validateEmail,
                                 ),
                               ),
                             ],
@@ -163,12 +177,12 @@ class _LogInState extends State<LogIn> {
         100,
         15,
       ),
-      color: Colors.teal,
+      color: Colors.cyan[600],
       child: Text("Register"),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50),
       ),
-      onPressed: () {},
+      onPressed: _sendToServer,
     );
   }
 
@@ -185,5 +199,40 @@ class _LogInState extends State<LogIn> {
         ),
       ),
     );
+  }
+
+  String validateName(String value) {
+    if (value.length < 5)
+      return 'Name must be more than 4 charater';
+    else
+      return null;
+  }
+
+  String validateEmail(String value) {
+    String pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regExp = new RegExp(pattern);
+    if (value.length == 0) {
+      return "Email is Required";
+    } else if (!regExp.hasMatch(value)) {
+      return "Invalid Email";
+    } else {
+      return null;
+    }
+  }
+
+  _sendToServer() {
+    if (_formKey.currentState.validate()) {
+      // No any error in validation
+      _formKey.currentState.save();
+      print("Name $_name");
+      // print("Mobile $mobile");
+      print("Email $_email");
+    } else {
+      // validation error
+      setState(() {
+        _validate = true;
+      });
+    }
   }
 }

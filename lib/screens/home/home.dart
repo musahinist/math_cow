@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:math_cow/components/app_bar.dart';
 import 'package:math_cow/data/provider/user_api.dart';
 import 'package:math_cow/data/services/question_service..dart';
 import 'package:math_cow/data/services/topic_service.dart';
@@ -11,9 +12,9 @@ class HomePage extends StatelessWidget {
   //HomePage({Key key}) : super(key: key);
   final tween = MultiTrackTween([
     Track("color1").add(Duration(seconds: 23),
-        ColorTween(begin: Colors.teal, end: Colors.deepOrange)),
+        ColorTween(begin: Colors.pink[300], end: Colors.limeAccent[700])),
     Track("color2").add(Duration(seconds: 17),
-        ColorTween(begin: Colors.pink[300], end: Colors.cyan[300])),
+        ColorTween(begin: Colors.purpleAccent, end: Colors.cyan[300])),
     Track("color3").add(Duration(seconds: 19),
         ColorTween(begin: Colors.cyan[200], end: Colors.purpleAccent)),
   ]);
@@ -28,8 +29,8 @@ class HomePage extends StatelessWidget {
         return Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomCenter,
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomLeft,
                   colors: [
                     animation["color1"],
                     animation["color2"],
@@ -52,41 +53,18 @@ class HomePage extends StatelessWidget {
                 return Stack(
                   children: <Widget>[
                     CardListView(),
-                    _appBar(),
+                    TransAppBar(
+                      licon: Icons.toys,
+                      ltext: " 25 Cards",
+                      ctext: "TOPICS",
+                      rtext: "03:00",
+                      ricon: Icons.timelapse,
+                    ),
                   ],
                 );
               },
             ));
       },
     );
-  }
-
-  Positioned _appBar() {
-    return Positioned(
-        top: 30,
-        left: 5,
-        right: 5,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Icon(
-                  Icons.toys,
-                ),
-                Text(" 25 Cards"),
-              ],
-            ),
-            Text("TOPICS"),
-            Row(
-              children: <Widget>[
-                Text("03:00"),
-                Icon(
-                  Icons.timelapse,
-                ),
-              ],
-            ),
-          ],
-        ));
   }
 }

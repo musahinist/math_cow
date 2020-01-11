@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import "package:flare_flutter/flare_actor.dart";
+import 'package:math_cow/components/app_bar.dart';
 import 'package:math_cow/components/progress_indicator.dart';
 import 'package:math_cow/data/model/question.dart';
 import 'package:math_cow/data/provider/user_api.dart';
@@ -73,7 +74,12 @@ class _GamePageState extends State<GamePage> {
     ]..shuffle();
     return Stack(
       children: <Widget>[
-        _appBar(context, _counter),
+        TransAppBar(
+          licon: Icons.arrow_back,
+          ctext: "QUESTIONS",
+          rtext: "03:00",
+          ricon: Icons.timelapse,
+        ),
         _isDragCompleted == false
             ? Stack(
                 // mainAxisAlignment: MainAxisAlignment.center,
@@ -103,6 +109,16 @@ class _GamePageState extends State<GamePage> {
                     child: ProgressIndic(
                       percent: _counter,
                     ),
+                  ),
+                  Positioned(
+                    bottom: 10,
+                    left: 10,
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
                   )
                 ],
               )
@@ -126,39 +142,6 @@ class _GamePageState extends State<GamePage> {
               ),
       ],
     );
-  }
-
-  Positioned _appBar(BuildContext context, int counter) {
-    return Positioned(
-        top: 30,
-        left: 5,
-        right: 5,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Icon(
-                    Icons.arrow_back,
-                  ),
-                ),
-              ],
-            ),
-            Text("QUESTIONS"),
-            Row(
-              children: <Widget>[
-                Text("03:00"),
-                Icon(
-                  Icons.timelapse,
-                ),
-              ],
-            ),
-          ],
-        ));
   }
 
   Widget _buildDraggable(Offset ofset, String text) {
