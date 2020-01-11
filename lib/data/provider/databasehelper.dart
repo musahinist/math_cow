@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:math_cow/data/model/user.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -120,5 +121,39 @@ class DatabaseHelper {
     final key = 'token';
     final value = prefs.get(key) ?? 0;
     print('read : $value');
+  }
+}
+
+class GEtUser {
+  // static Future getUsers() {
+  //   var url = baseUrl + "/api/users";
+  //   //  api/questions{tÄ±tle}
+  //   return http.get(url);
+  // }
+  static const baseUrl = "http://mathcow.herokuapp.com";
+  static Future postUser(String name, String email, String password) {
+    var url = baseUrl + "/api/users";
+    return http.post(url,
+        body: {'name': '$name', 'email': '$email', 'password': '$password'});
+  }
+
+  static Future authUser(String email, String password) {
+    var url = baseUrl + "/api/auth";
+    return http.post(url, body: {'email': '$email', 'password': '$password'});
+  }
+
+  static List<User> parseUsers(String responseBody) {
+    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+    return parsed.map<User>((json) => User.fromJson(json)).toList();
+  }
+
+  static Future<List<User>> getUsers() async {
+    String url = baseUrl + "/api/users";
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return parseUsers(response.body);
+    } else {
+      throw Exception('Unable to fetch users from the REST API');
+    }
   }
 }

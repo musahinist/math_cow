@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:math_cow/auth/login.dart';
 import 'package:math_cow/components/bottom-nav.dart';
-import 'package:math_cow/data/model/my_list_screen.dart';
+import 'package:math_cow/data/provider/my_list_screen.dart';
+
 import 'package:math_cow/screens/discovery/discovery.dart';
 import 'package:math_cow/screens/game/flip_game.dart';
 import 'package:math_cow/screens/home/home.dart';
@@ -43,8 +44,9 @@ class _AppState extends State<App> {
   List<Widget> _page = [
     HomePage(),
     FlipGame(),
-    ScrollAnimation(),
     LogIn(),
+    ScrollAnimation(),
+
     // DiscoveryPage(),
     AppStateBuilderEx(),
     MyListScreen(),
