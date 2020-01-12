@@ -3,15 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:math_cow/auth/login.dart';
 import 'package:math_cow/components/bottom-nav.dart';
 import 'package:math_cow/data/provider/my_list_screen.dart';
-
 import 'package:math_cow/screens/discovery/discovery.dart';
 import 'package:math_cow/screens/game/flip_game.dart';
 import 'package:math_cow/screens/home/home.dart';
 import 'package:math_cow/screens/profile/profile.dart';
 import 'package:math_cow/utils/exp_state_builder.dart';
 import 'package:math_cow/utils/scroll_animation.dart';
-
-//import 'auth/login.dart';
 
 void main() {
   runApp(MyApp());

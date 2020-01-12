@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 class TransAppBar extends StatelessWidget {
   final IconData licon, ricon;
   final String ltext, rtext, ctext;
+  final Function func;
   const TransAppBar(
-      {Key key, this.licon, this.ltext, this.ctext, this.rtext, this.ricon})
+      {Key key,
+      this.licon,
+      this.ltext,
+      this.ctext,
+      this.rtext,
+      this.ricon,
+      this.func})
       : super(key: key);
 
   @override
@@ -22,11 +29,13 @@ class TransAppBar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   IconButton(
-                    icon: Icon(licon ?? Icons.arrow_back),
-                    onPressed: () {},
-                  ),
+                      icon: Icon(licon ?? Icons.arrow_back),
+                      onPressed: () => licon == Icons.arrow_back
+                          ? Navigator.pop(context)
+                          : func),
                   Text(
                     ltext ?? "",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   )
                 ],
               ),
@@ -44,7 +53,8 @@ class TransAppBar extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Text(rtext ?? ""),
+                  Text(rtext ?? "",
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                   IconButton(
                     icon: Icon(ricon ?? Icons.timelapse),
                     onPressed: () {},
