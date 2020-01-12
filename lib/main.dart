@@ -39,13 +39,15 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   int _index;
   List<Widget> _page = [
+    AppStateBuilderEx(),
     HomePage(),
-    FlipGame(),
     LogIn(),
+    FlipGame(),
+
     ScrollAnimation(),
 
     // DiscoveryPage(),
-    AppStateBuilderEx(),
+
     MyListScreen(),
     // ProfilePage()
   ];

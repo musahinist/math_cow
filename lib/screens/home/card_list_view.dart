@@ -1,13 +1,10 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:math_cow/components/progress_indicator.dart';
-import 'package:math_cow/data/model/question.dart';
 import 'package:math_cow/data/model/topic.dart';
-import 'package:math_cow/data/provider/user_api.dart';
+import 'package:math_cow/data/provider/question_api.dart';
 import 'package:math_cow/data/services/question_service..dart';
 import 'package:math_cow/data/services/topic_service.dart';
-
 import 'package:math_cow/screens/game/game.dart';
 import 'package:math_cow/utils/fade_animation.dart';
 import 'package:math_cow/utils/loading_anim.dart';
@@ -140,7 +137,8 @@ class CardListView extends StatelessWidget {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => Injector(
                   inject: [
-                    Inject<QuestionService>(() => QuestionService(api: API()))
+                    Inject<QuestionService>(
+                        () => QuestionService(qapi: QuestionApi()))
                   ],
                   initState: () {
                     final ReactiveModel<QuestionService> questionModelRM =
@@ -192,7 +190,8 @@ class CardListView extends StatelessWidget {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => Injector(
                   inject: [
-                    Inject<QuestionService>(() => QuestionService(api: API()))
+                    Inject<QuestionService>(
+                        () => QuestionService(qapi: QuestionApi()))
                   ],
                   initState: () {
                     final ReactiveModel<QuestionService> questionModelRM =

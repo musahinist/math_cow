@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:math_cow/utils/fade_animation.dart';
 
 class LogIn extends StatefulWidget {
   @override
@@ -13,30 +12,27 @@ class _LogInState extends State<LogIn> {
   String _email;
   String _password;
   bool _validate = false;
-  // void _submitCommand() {
-  //   final form = formKey.currentState;
 
-  //   if (form.validate()) {
-  //     form.save();
+  void _sendToServer() {
+    if (_formKey.currentState.validate()) {
+      // No any error in validation
+      _formKey.currentState.save();
 
-  //     // Email & password matched our validation rules
-  //     // and are saved to _email and _password fields.
-  //     _loginCommand();
-  //   }
-  // }
-
-  // void _loginCommand() {
-  //   // This is just a demo, so no actual login here.
-  //   final snackbar = SnackBar(
-  //     content: Text('Email: $_email, password: $_password'),
-  //   );
-
-  //   scaffoldKey.currentState.showSnackBar(snackbar);
-  // }
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Name: $_name,Email: $_email, password: $_password'),
+      ));
+    } else {
+      // validation error
+      setState(() {
+        _validate = true;
+      });
+    }
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
+      key: _scaffoldKey,
+      // extendBody: true,
       body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -105,8 +101,8 @@ class _LogInState extends State<LogIn> {
                                     hintStyle: TextStyle(color: Colors.grey),
                                     border: InputBorder.none,
                                   ),
-                                  maxLength: 15,
-                                  validator: validateName,
+                                  //s  maxLength: 15,
+                                  validator: _validateName,
                                   onSaved: (String val) {
                                     _name = val;
                                   },
@@ -126,8 +122,8 @@ class _LogInState extends State<LogIn> {
                                         hintStyle:
                                             TextStyle(color: Colors.grey),
                                         border: InputBorder.none),
-                                    maxLength: 32,
-                                    validator: validateEmail,
+                                    // maxLength: 32,
+                                    validator: _validateEmail,
                                     onSaved: (String val) {
                                       _email = val;
                                     }),
@@ -145,7 +141,10 @@ class _LogInState extends State<LogIn> {
                                       hintText: "Password",
                                       hintStyle: TextStyle(color: Colors.grey),
                                       border: InputBorder.none),
-                                  validator: validateEmail,
+                                  validator: _validateName,
+                                  onSaved: (String val) {
+                                    _password = val;
+                                  },
                                 ),
                               ),
                             ],
@@ -201,14 +200,16 @@ class _LogInState extends State<LogIn> {
     );
   }
 
-  String validateName(String value) {
+  String _validateName(String value) {
     if (value.length < 5)
       return 'Name must be more than 4 charater';
-    else
-      return null;
+    else if (value.length > 15) {
+      return 'Name must be less than 16 charater';
+    }
+    return null;
   }
 
-  String validateEmail(String value) {
+  String _validateEmail(String value) {
     String pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regExp = new RegExp(pattern);
@@ -218,21 +219,6 @@ class _LogInState extends State<LogIn> {
       return "Invalid Email";
     } else {
       return null;
-    }
-  }
-
-  _sendToServer() {
-    if (_formKey.currentState.validate()) {
-      // No any error in validation
-      _formKey.currentState.save();
-      print("Name $_name");
-      // print("Mobile $mobile");
-      print("Email $_email");
-    } else {
-      // validation error
-      setState(() {
-        _validate = true;
-      });
     }
   }
 }

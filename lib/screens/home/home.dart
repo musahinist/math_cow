@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:math_cow/components/app_bar.dart';
-import 'package:math_cow/data/provider/user_api.dart';
-import 'package:math_cow/data/services/question_service..dart';
+import 'package:math_cow/data/provider/topic_api.dart';
+
 import 'package:math_cow/data/services/topic_service.dart';
 
 import 'package:math_cow/screens/home/card_list_view.dart';
@@ -39,7 +39,7 @@ class HomePage extends StatelessWidget {
             ),
             child: Injector(
               inject: [
-                Inject<TopicService>(() => TopicService(api: API())),
+                Inject<TopicService>(() => TopicService(tapi: TopicApi())),
                 /*Inject<QuestionService>(() => QuestionService(api: API()))*/
               ],
               initState: () {

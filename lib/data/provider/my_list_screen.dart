@@ -1,6 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:math_cow/data/provider/databasehelper.dart';
+
+import 'package:math_cow/data/provider/user_api.dart';
 
 class MyListScreen extends StatefulWidget {
   @override
@@ -9,9 +9,9 @@ class MyListScreen extends StatefulWidget {
 
 class _MyListScreenState extends State {
   var users;
-  DatabaseHelper databaseHelper = DatabaseHelper();
+  UserApi databaseHelper = UserApi();
   _getUsers() {
-    users = databaseHelper.loginData('oguzcc22', 'oguzcc73@gmail.com', '12345');
+    users = databaseHelper.loginUser('oguzcc22', 'oguzcc73@gmail.com', '12345');
   }
 
   initState() {

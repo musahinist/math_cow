@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import "package:flare_flutter/flare_actor.dart";
 import 'package:math_cow/components/app_bar.dart';
 import 'package:math_cow/components/progress_indicator.dart';
-import 'package:math_cow/data/model/question.dart';
-import 'package:math_cow/data/provider/user_api.dart';
+
 import 'package:math_cow/data/services/question_service..dart';
 
-import 'package:math_cow/utils/fade_animation.dart';
 import 'package:math_cow/utils/loading_anim.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
@@ -26,7 +24,7 @@ class _GamePageState extends State<GamePage> {
   int _counter;
   int _index;
   // List<Question> qs;
-  API api = API();
+  // QuestionApi qapi = QuestionApi();
 
   // void setCards() async {
   //   qs = await api.getQuestions(widget.id);
