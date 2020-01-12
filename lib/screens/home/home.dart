@@ -27,43 +27,44 @@ class HomePage extends StatelessWidget {
       duration: tween.duration,
       builder: (context, animation) {
         return Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomLeft,
-                  colors: [
-                    animation["color1"],
-                    animation["color2"],
-                    animation["color3"]
-                  ]),
-            ),
-            child: Injector(
-              inject: [
-                Inject<TopicService>(() => TopicService(tapi: TopicApi())),
-                /*Inject<QuestionService>(() => QuestionService(api: API()))*/
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomLeft,
+              colors: [
+                animation["color1"],
+                animation["color2"],
+                animation["color3"]
               ],
-              initState: () {
-                final ReactiveModel<TopicService> topicModelRM =
-                    Injector.getAsReactive<TopicService>();
-                topicModelRM.setState((state) => state.getTopics());
-              },
-              builder: (context) {
-                //  final ReactiveModel<TopicService> topicModelRM =
-                // Injector.getAsReactive<TopicService>();
-                return Stack(
-                  children: <Widget>[
-                    CardListView(),
-                    TransAppBar(
-                      licon: Icons.toys,
-                      ltext: " 25 Cards",
-                      ctext: "TOPICS",
-                      rtext: "03:00",
-                      ricon: Icons.timelapse,
-                    ),
-                  ],
-                );
-              },
-            ));
+            ),
+          ),
+          child: Injector(
+            inject: [
+              Inject<TopicService>(() => TopicService(tapi: TopicApi()))
+            ],
+            initState: () {
+              final ReactiveModel<TopicService> topicModelRM =
+                  Injector.getAsReactive<TopicService>();
+              topicModelRM.setState((state) => state.read());
+            },
+            builder: (context) {
+              //  final ReactiveModel<TopicService> topicModelRM =
+              // Injector.getAsReactive<TopicService>();
+              return Stack(
+                children: <Widget>[
+                  CardListView(),
+                  TransAppBar(
+                    licon: Icons.toys,
+                    ltext: " 25 Cards",
+                    ctext: "TOPICS",
+                    rtext: "03:00",
+                    ricon: Icons.timelapse,
+                  ),
+                ],
+              );
+            },
+          ),
+        );
       },
     );
   }

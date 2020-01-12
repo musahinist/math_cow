@@ -8,19 +8,19 @@ class UserService {
   List<User> _users;
   List<User> get users => _users;
 
-  Future getUsers() async {
+  getUsers() async {
     _users = await _uapi.getUsers();
   }
 
-  Future postUser(name, email, password) async {
-    await _uapi.postUser(name, email, password);
-  }
+  // Future postUser(name, email, password) async {
+  //   await _uapi.postUser(name, email, password);
+  // }
 
   Future registerUser(name, email, password) async {
     await _uapi.registerUser(name, email, password);
   }
 
-  Future loginUser(name, email, password) async {
-    await _uapi.loginUser(name, email, password);
+  Future logInUser(email, password) async {
+    await _uapi.logInUser(email, password);
   }
 }

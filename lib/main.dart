@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:math_cow/auth/login.dart';
 import 'package:math_cow/components/bottom-nav.dart';
-import 'package:math_cow/data/provider/my_list_screen.dart';
 import 'package:math_cow/screens/discovery/discovery.dart';
 import 'package:math_cow/screens/game/flip_game.dart';
 import 'package:math_cow/screens/home/home.dart';
@@ -15,12 +14,12 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([/*SystemUiOverlay.bottom*/]);
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    // This widget is the root of application.
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
@@ -43,13 +42,9 @@ class _AppState extends State<App> {
     HomePage(),
     LogIn(),
     FlipGame(),
-
     ScrollAnimation(),
-
-    // DiscoveryPage(),
-
-    MyListScreen(),
-    // ProfilePage()
+    DiscoveryPage(),
+    ProfilePage()
   ];
   @override
   void initState() {
