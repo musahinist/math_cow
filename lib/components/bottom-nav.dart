@@ -17,7 +17,7 @@ class BottomNavBar extends StatelessWidget {
     //https://pub.dev/packages/convex_bottom_ban
     return ConvexAppBar(
       onTap: (i) => setIndex(i),
-      backgroundColor: Colors.cyan[600],
+      backgroundColor: Colors.purple[900],
       curve: Curves.decelerate,
       style: TabStyle.react,
       items: items,

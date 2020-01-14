@@ -35,7 +35,8 @@ class TransAppBar extends StatelessWidget {
                           : func),
                   Text(
                     ltext ?? "",
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16),
                   )
                 ],
               ),
@@ -45,7 +46,7 @@ class TransAppBar extends StatelessWidget {
               child: Center(
                 child: Text(ctext ?? "",
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 16)),
+                        fontWeight: FontWeight.bold, fontSize: 18)),
               ),
             ),
             Expanded(
@@ -54,7 +55,8 @@ class TransAppBar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Text(rtext ?? "",
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16)),
                   IconButton(
                     icon: Icon(ricon ?? Icons.timelapse),
                     onPressed: () {},

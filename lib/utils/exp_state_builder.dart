@@ -32,8 +32,8 @@ class AppStateBuilderEx extends StatelessWidget {
             //To mutate the state, use `setState` method.
             //setState notifies observers after state mutation.
             onPressed: () => topicModelRM.setState(
-              (state) => state
-                  .getUsers(), // "deneme13", "deneme13@htomail.com", "1234567"
+              (state) => state.registerUser(
+                  "deneme15", "deneme15@htomail.com", "1234567"), //
             ),
           ),
         );

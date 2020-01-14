@@ -10,6 +10,14 @@ import 'package:states_rebuilder/states_rebuilder.dart';
 
 class HomePage extends StatelessWidget {
   //HomePage({Key key}) : super(key: key);
+  // final tween = MultiTrackTween([
+  //   Track("color1").add(Duration(seconds: 23),
+  //       ColorTween(begin: Color(0x09114D), end: Colors.teal[300])),
+  //   Track("color2").add(Duration(seconds: 17),
+  //       ColorTween(begin: Colors.cyan[200], end: Colors.purpleAccent)),
+  //   Track("color3").add(Duration(seconds: 19),
+  //       ColorTween(begin: Colors.purpleAccent, end: Colors.cyan[300])),
+  // ]);
   final tween = MultiTrackTween([
     Track("color1").add(Duration(seconds: 23),
         ColorTween(begin: Colors.pink[300], end: Colors.limeAccent[700])),
@@ -18,7 +26,6 @@ class HomePage extends StatelessWidget {
     Track("color3").add(Duration(seconds: 19),
         ColorTween(begin: Colors.cyan[200], end: Colors.purpleAccent)),
   ]);
-
   @override
   Widget build(BuildContext context) {
     return ControlledAnimation(
@@ -45,7 +52,7 @@ class HomePage extends StatelessWidget {
             initState: () {
               final ReactiveModel<TopicService> topicModelRM =
                   Injector.getAsReactive<TopicService>();
-              topicModelRM.setState((state) => state.read());
+              topicModelRM.setState((state) => state.getTopics());
             },
             builder: (context) {
               //  final ReactiveModel<TopicService> topicModelRM =

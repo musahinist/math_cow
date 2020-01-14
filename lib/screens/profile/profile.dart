@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:math_cow/components/app_bar.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
@@ -169,22 +170,29 @@ class ProfilePage extends StatelessWidget {
                 ],
               ),
             ),
-            AppBar(
-              backgroundColor: Colors.transparent,
-              title: Text("PROFILE"),
-              centerTitle: true,
-              elevation: 0,
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.notifications),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: Icon(Icons.menu),
-                  onPressed: () {},
-                ),
-              ],
+            TransAppBar(
+              licon: Icons.toys,
+              ltext: " 25 Cards",
+              ctext: "TOPICS",
+              rtext: "03:00",
+              ricon: Icons.timelapse,
             ),
+            // AppBar(
+            //   backgroundColor: Colors.transparent,
+            //   title: Text("PROFILE"),
+            //   centerTitle: true,
+            //   elevation: 0,
+            //   actions: <Widget>[
+            //     IconButton(
+            //       icon: Icon(Icons.notifications),
+            //       onPressed: () {},
+            //     ),
+            //     IconButton(
+            //       icon: Icon(Icons.menu),
+            //       onPressed: () {},
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),

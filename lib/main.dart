@@ -38,13 +38,13 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   int _index;
   List<Widget> _page = [
-    AppStateBuilderEx(),
     HomePage(),
+    DiscoveryPage(),
+    ProfilePage(),
     LogIn(),
     FlipGame(),
     ScrollAnimation(),
-    DiscoveryPage(),
-    ProfilePage()
+    AppStateBuilderEx(),
   ];
   @override
   void initState() {

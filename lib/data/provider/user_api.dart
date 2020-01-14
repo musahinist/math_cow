@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:http/http.dart' as http;
 import 'package:math_cow/data/model/user.dart';
 import 'dart:convert';

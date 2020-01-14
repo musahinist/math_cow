@@ -47,7 +47,7 @@ class _GamePageState extends State<GamePage> {
               gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Colors.cyan[900], Colors.purple[900]]),
+                  colors: [Colors.teal[500], Colors.purple[900]]),
             ),
             child: StateBuilder<QuestionService>(
               models: [Injector.getAsReactive<QuestionService>()],
@@ -65,10 +65,10 @@ class _GamePageState extends State<GamePage> {
   Stack _gameStack(QuestionService store) {
     Size media = MediaQuery.of(context).size;
     List<Offset> ofsetlist = [
-      Offset(40, 80),
-      Offset(media.width - 160, 80),
-      Offset(40, media.height - 200),
-      Offset(media.width - 160, media.height - 200)
+      Offset(media.width / 8, media.height / 7),
+      Offset(media.width * (13 / 24), media.height / 7),
+      Offset(media.width / 8, media.height * 6 / 7 - media.width / 3),
+      Offset(media.width * (13 / 24), media.height * 6 / 7 - media.width / 3)
     ]..shuffle();
     return Stack(
       children: <Widget>[
@@ -83,21 +83,26 @@ class _GamePageState extends State<GamePage> {
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   _buildDraggable(
-                      Offset(media.width / 2 - 60, media.height / 2 - 60),
+                      Offset(media.width / 2 - media.width * .18,
+                          media.height / 2 - media.width * .18),
                       store.questions[_index].question),
                   Stack(
                     children: <Widget>[
                       _buildDragTargetWithData(
                           store.questions[_index].answers[0].isCorrect,
+                          store.questions[_index].answers[0].answer,
                           ofsetlist[0]),
                       _buildDragTargetWithData(
                           store.questions[_index].answers[1].isCorrect,
+                          store.questions[_index].answers[1].answer,
                           ofsetlist[1]),
                       _buildDragTargetWithData(
                           store.questions[_index].answers[2].isCorrect,
+                          store.questions[_index].answers[2].answer,
                           ofsetlist[2]),
                       _buildDragTargetWithData(
                           store.questions[_index].answers[3].isCorrect,
+                          store.questions[_index].answers[3].answer,
                           ofsetlist[3]),
                     ],
                   ),
@@ -132,8 +137,12 @@ class _GamePageState extends State<GamePage> {
                     setState(() {
                       _isDragCompleted = false;
                       _isAnswerCorrect = false;
-                      _index++;
-                      print("idex:$_index");
+                      if (_index >= 2) {
+                        _showDialog(context);
+                        // Navigator.pop(context);
+                      } else {
+                        _index++;
+                      }
                     });
                   },
                 ),
@@ -143,12 +152,14 @@ class _GamePageState extends State<GamePage> {
   }
 
   Widget _buildDraggable(Offset ofset, String text) {
+    Size media = MediaQuery.of(context).size;
     return Positioned(
       top: ofset.dy,
       left: ofset.dx,
       child: Draggable(
-        child: buildCircledBox(text, color: Colors.green[200]),
-        feedback: buildCircledBox(text, color: Colors.black),
+        child: buildCircledBox(text, media.width * .36, color: Colors.black12),
+        feedback:
+            buildCircledBox(text, media.width * .36, color: Colors.transparent),
         childWhenDragging:
             Container(), // buildCircledBox("+1", color:Colors.grey[300]),
         data: "Musa", //can be list etc.
@@ -169,7 +180,8 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
-  Widget _buildDragTargetWithData(dynamic isAnswer, Offset ofset) {
+  Widget _buildDragTargetWithData(bool isAnswer, String text, Offset ofset) {
+    Size media = MediaQuery.of(context).size;
     return Positioned(
       top: ofset.dy,
       left: ofset.dx,
@@ -182,8 +194,7 @@ class _GamePageState extends State<GamePage> {
               candidateData.toString() +
               " , rejectedData = " +
               rejectedData.toString());
-          return buildCircledBox("$isAnswer",
-              color: isAnswer ? Colors.green[200] : Colors.red[200]);
+          return buildCircledBox(text, media.width / 3, color: Colors.black12);
         },
         onWillAccept: (data) {
           print("onWillAccept and data:$data");
@@ -208,20 +219,100 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
-  Container buildCircledBox(String title, {Color color}) {
+  Container buildCircledBox(String title, double size, {Color color}) {
     return Container(
-      width: 120,
-      height: 120,
+      width: size,
+      height: size,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(60),
-        color: color.withAlpha(30),
+        borderRadius: BorderRadius.circular(size / 2),
+        color: color,
       ),
       child: Center(
         child: Text(
           title,
+          textAlign: TextAlign.center,
           style: TextStyle(inherit: false, fontSize: 20),
         ),
       ),
     );
+  }
+
+  void _showDialog(BuildContext ctx) {
+    // showGeneralDialog(
+    //     context: ctx,
+    //     barrierDismissible: true,
+    //     barrierLabel:
+    //         MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    //     barrierColor: Colors.black45,
+    //     transitionDuration: const Duration(milliseconds: 600),
+    //     pageBuilder: (BuildContext buildContext, Animation animation,
+    //         Animation secondaryAnimation) {
+    //       return Center(
+    //         child: Container(
+    //           width: MediaQuery.of(context).size.width * .8,
+    //           height: MediaQuery.of(context).size.height * .8,
+    //           padding: EdgeInsets.all(20),
+    //           decoration: BoxDecoration(
+    //             borderRadius: BorderRadius.circular(10),
+    //             color: Colors.pink[200],
+    //           ),
+    //           child: Column(
+    //             children: [
+    //               RaisedButton(
+    //                 onPressed: () {
+    //                   // Navigator.popUntil(context, predicate); ile home gidilebilir
+    //                   // Navigator.of(context).pop();
+    //                 },
+    //                 child: Text(
+    //                   "Save",
+    //                   style: TextStyle(color: Colors.white),
+    //                 ),
+    //                 color: const Color(0xFF1BC0C5),
+    //               )
+    //             ],
+    //           ),
+    //         ),
+    //       );
+    //     });
+    // flutter defined function
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)), //this right here
+            child: Container(
+              height: 200,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextField(
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'What do you want to remember?'),
+                    ),
+                    SizedBox(
+                      width: 320.0,
+                      child: RaisedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          "Save",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        color: const Color(0xFF1BC0C5),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 }

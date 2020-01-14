@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:math_cow/data/services/user_service.dart';
+import 'package:math_cow/utils/fade_animation.dart';
+import 'package:states_rebuilder/states_rebuilder.dart';
+import 'package:math_cow/data/provider/user_api.dart';
 
 class LogIn extends StatefulWidget {
   @override
@@ -6,188 +10,218 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
-  final _formKey = GlobalKey<FormState>();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
   String _name;
   String _email;
   String _password;
+  bool _register = true;
   bool _validate = false;
+  final _formKey = GlobalKey<FormState>();
 
-  void _sendToServer() {
-    if (_formKey.currentState.validate()) {
-      // No any error in validation
-      _formKey.currentState.save();
-
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text('Name: $_name,Email: $_email, password: $_password'),
-      ));
-    } else {
-      // validation error
-      setState(() {
-        _validate = true;
-      });
-    }
-  }
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      // extendBody: true,
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Colors.teal[300], Colors.pink[300]]),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              //
-              Padding(
-                padding: const EdgeInsets.all(40),
+    return Injector(
+        inject: [Inject<UserService>(() => UserService(uapi: UserApi()))],
+        builder: (context) {
+          final ReactiveModel<UserService> userService =
+              Injector.getAsReactive<UserService>(context: context);
+          return Scaffold(
+            key: _scaffoldKey,
+            // extendBody: true,
+            body: SingleChildScrollView(
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Colors.teal[300], Colors.pink[300]]),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      "Register",
-                      style: TextStyle(fontSize: 40),
+                    //
+                    FadeAnimation(
+                      1,
+                      Padding(
+                        padding: const EdgeInsets.all(40),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              _register ? "Register" : "LogIn",
+                              style: TextStyle(fontSize: 40),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    Container(
+                      margin: const EdgeInsets.all(10),
+                      height: MediaQuery.of(context).size.height * 0.65,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(40)),
+                      child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: FadeAnimation(
+                          1,
+                          Form(
+                            autovalidate: _validate,
+                            key: _formKey,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(20),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color:
+                                                Color.fromRGBO(225, 95, 27, .3),
+                                            blurRadius: 15,
+                                            offset: Offset(0, 5))
+                                      ]),
+                                  child: Column(
+                                    children: <Widget>[
+                                      _register
+                                          ? Container(
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                border: Border(
+                                                  bottom: BorderSide(
+                                                    color: Colors.grey[200],
+                                                  ),
+                                                ),
+                                              ),
+                                              child: TextFormField(
+                                                style: TextStyle(
+                                                    color: Colors.black54),
+                                                decoration: InputDecoration(
+                                                  hintText: "User Name",
+                                                  hintStyle: TextStyle(
+                                                      color: Colors.grey),
+                                                  border: InputBorder.none,
+                                                ),
+                                                //s  maxLength: 15,
+                                                validator: _validateName,
+                                                onSaved: (String val) {
+                                                  _name = val;
+                                                },
+                                              ),
+                                            )
+                                          : Container(),
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                bottom: BorderSide(
+                                                    color: Colors.grey[200]))),
+                                        child: TextFormField(
+                                            keyboardType:
+                                                TextInputType.emailAddress,
+                                            style: TextStyle(
+                                                color: Colors.black54),
+                                            decoration: InputDecoration(
+                                                hintText: "Email",
+                                                hintStyle: TextStyle(
+                                                    color: Colors.grey),
+                                                border: InputBorder.none),
+                                            // maxLength: 32,
+                                            validator: _validateEmail,
+                                            onSaved: (String val) {
+                                              _email = val;
+                                            }),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                bottom: BorderSide(
+                                                    color: Colors.grey[200]))),
+                                        child: TextFormField(
+                                          obscureText: true,
+                                          style:
+                                              TextStyle(color: Colors.black54),
+                                          decoration: InputDecoration(
+                                              hintText: "Password",
+                                              hintStyle:
+                                                  TextStyle(color: Colors.grey),
+                                              border: InputBorder.none),
+                                          validator: _validateName,
+                                          onSaved: (String val) {
+                                            _password = val;
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                OutlineButton(
+                                  borderSide:
+                                      BorderSide(color: Colors.grey[300]),
+                                  onPressed: () => userService
+                                      .setState((state) => setState(() {
+                                            _register = !_register;
+                                          })),
+                                  child: Text(
+                                    _register
+                                        ? "I have already account"
+                                        : "Create a new account",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ),
+                                RaisedButton(
+                                  elevation: 0,
+                                  color: Colors.cyan[600],
+                                  child: Container(
+                                      width: 250,
+                                      height: 50,
+                                      child: Center(
+                                          child: Text(_register
+                                              ? "Register"
+                                              : "LogIn"))),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  onPressed: () =>
+                                      userService.setState((state) {
+                                    if (_formKey.currentState.validate()) {
+                                      // No any error in validation
+                                      _formKey.currentState.save();
+                                      state.registerUser(
+                                          _name, _email, _password);
+                                      _scaffoldKey.currentState
+                                          .showSnackBar(SnackBar(
+                                        content: Text("Acount Created"),
+                                      ));
+                                    } else {
+                                      // validation error
+                                      setState(() {
+                                        _validate = true;
+                                      });
+                                    }
+                                  }),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-
-              Container(
-                margin: const EdgeInsets.all(10),
-                height: MediaQuery.of(context).size.height * 0.7,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(40)),
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Form(
-                    autovalidate: _validate,
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Color.fromRGBO(225, 95, 27, .3),
-                                    blurRadius: 15,
-                                    offset: Offset(0, 5))
-                              ]),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: Colors.grey[200],
-                                    ),
-                                  ),
-                                ),
-                                child: TextFormField(
-                                  style: TextStyle(color: Colors.black54),
-                                  decoration: InputDecoration(
-                                    hintText: "User Name",
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    border: InputBorder.none,
-                                  ),
-                                  //s  maxLength: 15,
-                                  validator: _validateName,
-                                  onSaved: (String val) {
-                                    _name = val;
-                                  },
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Colors.grey[200]))),
-                                child: TextFormField(
-                                    keyboardType: TextInputType.emailAddress,
-                                    style: TextStyle(color: Colors.black54),
-                                    decoration: InputDecoration(
-                                        hintText: "Email",
-                                        hintStyle:
-                                            TextStyle(color: Colors.grey),
-                                        border: InputBorder.none),
-                                    // maxLength: 32,
-                                    validator: _validateEmail,
-                                    onSaved: (String val) {
-                                      _email = val;
-                                    }),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            color: Colors.grey[200]))),
-                                child: TextFormField(
-                                  obscureText: true,
-                                  style: TextStyle(color: Colors.black54),
-                                  decoration: InputDecoration(
-                                      hintText: "Password",
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      border: InputBorder.none),
-                                  validator: _validateName,
-                                  onSaved: (String val) {
-                                    _password = val;
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Text(
-                          "Forgot Password?",
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        _withRoundedRectangleBorder()
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _withRoundedRectangleBorder() {
-    return RaisedButton(
-      elevation: 0,
-      padding: const EdgeInsets.fromLTRB(
-        100,
-        15,
-        100,
-        15,
-      ),
-      color: Colors.cyan[600],
-      child: Text("Register"),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50),
-      ),
-      onPressed: _sendToServer,
-    );
+            ),
+          );
+        });
   }
 
   Container roundedButton({String title, Color color, double margin = 0}) {
     return Container(
-      height: 50,
+      height: 60,
       margin: EdgeInsets.symmetric(horizontal: margin),
       decoration:
           BoxDecoration(borderRadius: BorderRadius.circular(50), color: color),
