@@ -21,7 +21,8 @@ class UserApi {
       print('data : ${data["error"]}');
       print('error error errr');
     } else {
-      await _save(_token);
+      await save(_token);
+      return _token;
     }
   }
 
@@ -39,7 +40,7 @@ class UserApi {
       print('data : ${data["error"]}');
       print('error error errr');
     } else {
-      await _save(_token);
+      await save(_token);
     }
   }
 
@@ -63,14 +64,14 @@ class UserApi {
     return parsed.map<User>((json) => User.fromJson(json)).toList();
   }
 
-  _save(String token) async {
+  save(String token) async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'token';
     final value = token;
     prefs.setString(key, value);
   }
 
-  read() async {
+  Future<String> read() async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'token';
     final value = prefs.get(key) ?? 0;

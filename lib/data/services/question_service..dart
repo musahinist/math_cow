@@ -10,5 +10,6 @@ class QuestionService {
 
   Future getQuestions(String cardID) async {
     _questions = await _qapi.getQuestions(cardID);
+    print(_questions);
   }
 }

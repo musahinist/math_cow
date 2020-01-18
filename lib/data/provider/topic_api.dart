@@ -27,6 +27,7 @@ class TopicApi {
     final prefs = await SharedPreferences.getInstance();
     final key = 'token';
     final value = prefs.get(key) ?? 0;
+    print(value);
 
     String url = baseUrl + "/api/topics";
     print("toopic api called");

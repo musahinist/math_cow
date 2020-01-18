@@ -1,138 +1,154 @@
 import 'package:flutter/material.dart';
+import 'package:math_cow/components/app_bar.dart';
+import 'package:states_rebuilder/states_rebuilder.dart';
+import 'package:math_cow/data/services/user_service.dart';
 
 class DiscoveryPage extends StatelessWidget {
+  final UserService store;
+  DiscoveryPage(this.store);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              colors: [Colors.teal[600], Colors.lime[300]]),
-        ),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 40,
+    return Stack(
+      children: <Widget>[
+        Scaffold(
+          body: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  colors: [Colors.teal[600], Colors.lime[300]]),
             ),
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Leadership",
-                    // style: TextStyle(color: Colors.white, fontSize: 40),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              height: 200,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 40,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      _buildCircleavatar(),
                       Text(
-                        "Musa SAHIN",
-                        style: TextStyle(
-                            color: Colors.grey[50],
-                            fontWeight: FontWeight.bold),
+                        "Leadership",
+                        // style: TextStyle(color: Colors.white, fontSize: 40),
                       ),
-                      Text(
-                        "PRO",
-                        style: TextStyle(
-                            color: Colors.grey[100],
-                            fontWeight: FontWeight.bold),
-                      ),
-                      _roundedButton(
-                          title: "1000",
-                          color: Colors.lime[500],
-                          margin: 10,
-                          padding: 10),
                     ],
-                  ),
-                  Column(
-                    children: <Widget>[
-                      _buildCircleavatar(),
-                      Text(
-                        "Musa SAHIN",
-                        style: TextStyle(
-                            color: Colors.grey[50],
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "PRO",
-                        style: TextStyle(
-                            color: Colors.grey[100],
-                            fontWeight: FontWeight.bold),
-                      ),
-                      _roundedButton(
-                          title: "1000",
-                          color: Colors.lime[500],
-                          margin: 10,
-                          padding: 10),
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      _buildCircleavatar(),
-                      Text(
-                        "Musa SAHIN",
-                        style: TextStyle(
-                            color: Colors.grey[50],
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "PRO",
-                        style: TextStyle(
-                            color: Colors.grey[100],
-                            fontWeight: FontWeight.bold),
-                      ),
-                      _roundedButton(
-                          title: "1000",
-                          color: Colors.lime[500],
-                          margin: 10,
-                          padding: 10),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40))),
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    physics: BouncingScrollPhysics(),
-                    itemCount: 20,
-                    itemBuilder: _buildList,
                   ),
                 ),
-              ),
-            )
-          ],
+                Container(
+                  height: 200,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          _buildCircleavatar(1),
+                          Text(
+                            store.users[1].name,
+                            style: TextStyle(
+                                color: Colors.grey[50],
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "PRO",
+                            style: TextStyle(
+                                color: Colors.grey[100],
+                                fontWeight: FontWeight.bold),
+                          ),
+                          _roundedButton(
+                              title: "1000",
+                              color: Colors.lime[500],
+                              margin: 10,
+                              padding: 10),
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[
+                          _buildCircleavatar(0),
+                          Text(
+                            store.users[0].name,
+                            style: TextStyle(
+                                color: Colors.grey[50],
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "PRO",
+                            style: TextStyle(
+                                color: Colors.grey[100],
+                                fontWeight: FontWeight.bold),
+                          ),
+                          _roundedButton(
+                              title: "1000",
+                              color: Colors.lime[500],
+                              margin: 10,
+                              padding: 10),
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          _buildCircleavatar(2),
+                          Text(
+                            store.users[2].name,
+                            style: TextStyle(
+                                color: Colors.grey[50],
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            "PRO",
+                            style: TextStyle(
+                                color: Colors.grey[100],
+                                fontWeight: FontWeight.bold),
+                          ),
+                          _roundedButton(
+                              title: "1000",
+                              color: Colors.lime[500],
+                              margin: 10,
+                              padding: 10),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40),
+                            topRight: Radius.circular(40))),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        physics: BouncingScrollPhysics(),
+                        itemCount: store.users.length,
+                        itemBuilder: _buildList,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
-      ),
+        TransAppBar(
+          licon: Icons.toys,
+          ltext: " 25 Cards",
+          ctext: "TOPICS",
+          rtext: "03:00",
+          ricon: Icons.timelapse,
+        ),
+      ],
     );
   }
 
-  Padding _buildCircleavatar() {
+  Padding _buildCircleavatar(int index) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Stack(
@@ -147,7 +163,10 @@ class DiscoveryPage extends StatelessWidget {
             ),
           ),
           _roundedButton(
-              title: "1", color: Colors.teal[500], margin: 8, padding: 5)
+              title: "${index + 1}",
+              color: Colors.teal[500],
+              margin: 8,
+              padding: 5)
         ],
       ),
     );
@@ -160,11 +179,11 @@ class DiscoveryPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            "#$index",
+            "#${index + 1}",
             style: TextStyle(color: Colors.grey, fontSize: 18),
           ),
           _roundedButton(
-              title: "${1000 - index}",
+              title: "${store.users[index].points}",
               color: Colors.lime[500],
               margin: 10,
               padding: 10),
@@ -174,7 +193,7 @@ class DiscoveryPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   Text(
-                    "Musa SAHIN",
+                    "${store.users[index].name}",
                     style: TextStyle(
                         color: Colors.grey[900], fontWeight: FontWeight.bold),
                   ),

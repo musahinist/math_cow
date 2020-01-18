@@ -16,14 +16,14 @@ class TopicService {
 
   Future getTopics() async {
     // var connectivityResult = await (Connectivity().checkConnectivity());
-    await read();
-    print(_topics);
-    if (_topics != null /*|| connectivityResult == ConnectivityResult.none*/) {
-      // await read();
+    var topic = await _setTopicsFromPrefs();
+    // print(_topics);
+    if (topic != "" /*|| connectivityResult == ConnectivityResult.none*/) {
+      print("call setTopicFromPrefs");
+      // print("prefs topic: $topic");
+      _setTopicsFromPrefs();
     } else {
-      String body = await _tapi.getTopics();
-      _topics = _tapi.parseTopics(body);
-      await _save(body);
+      _setTopicsFromApiandSavaToPrefs();
     }
   }
 
@@ -35,11 +35,18 @@ class TopicService {
     // read();
   }
 
-  Future read() async {
+  Future _setTopicsFromApiandSavaToPrefs() async {
+    String body = await _tapi.getTopics();
+    _topics = _tapi.parseTopics(body);
+    await _save(body);
+  }
+
+  Future _setTopicsFromPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'topics';
-    final String value = await prefs.get(key) ?? 0;
-    print('read : $value');
+    final String value = await prefs.get(key) ?? "";
+
     _topics = _tapi.parseTopics(value);
+    return value;
   }
 }

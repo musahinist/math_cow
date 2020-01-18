@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:math_cow/components/circular_progress_indicator.dart';
 import 'package:math_cow/components/progress_indicator.dart';
 import 'package:math_cow/data/model/topic.dart';
 import 'package:math_cow/data/provider/question_api.dart';
@@ -35,6 +36,7 @@ class CardListView extends StatelessWidget {
           return model.whenConnectionState(
             onIdle: () => null,
             onWaiting: () => Center(child: Loading()),
+            onError: (_) => null,
             onData: (store) => Center(
                 //use the `state` getter to get the model state.
                 child: ListView(
@@ -43,7 +45,6 @@ class CardListView extends StatelessWidget {
                   (i) => _buildTopicsWithData(store.topics[i]))
                 ..insert(0, _hero(context)),
             )),
-            onError: (_) => null,
           );
         });
   }
