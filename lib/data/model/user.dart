@@ -5,7 +5,7 @@ class User {
   String sId;
   String name;
   String email;
-  int iV;
+  List<FinishedCards> finishedCards;
 
   User(
       {this.isAdmin,
@@ -14,7 +14,7 @@ class User {
       this.sId,
       this.name,
       this.email,
-      this.iV});
+      this.finishedCards});
 
   User.fromJson(Map<String, dynamic> json) {
     isAdmin = json['isAdmin'];
@@ -23,7 +23,12 @@ class User {
     sId = json['_id'];
     name = json['name'];
     email = json['email'];
-    iV = json['__v'];
+    // if (json['finishedCards'] != null) {
+    //   finishedCards = new List<FinishedCards>();
+    //   json['finishedCards'].forEach((v) {
+    //     finishedCards.add(new FinishedCards.fromJson(v));
+    //   });
+    // }
   }
 
   Map<String, dynamic> toJson() {
@@ -34,7 +39,29 @@ class User {
     data['_id'] = this.sId;
     data['name'] = this.name;
     data['email'] = this.email;
-    data['__v'] = this.iV;
+    if (this.finishedCards != null) {
+      data['finishedCards'] =
+          this.finishedCards.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class FinishedCards {
+  String tpicID;
+  String cardID;
+
+  FinishedCards({this.tpicID, this.cardID});
+
+  FinishedCards.fromJson(Map<String, dynamic> json) {
+    tpicID = json['tpicID'];
+    cardID = json['cardID'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['tpicID'] = this.tpicID;
+    data['cardID'] = this.cardID;
     return data;
   }
 }

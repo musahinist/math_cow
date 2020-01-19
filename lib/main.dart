@@ -30,7 +30,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MathCow',
-      theme: ThemeData(brightness: Brightness.dark, fontFamily: 'RobotoMono'),
+      theme: ThemeData(
+        brightness: Brightness.dark, /*fontFamily: 'RobotoMono'*/
+      ),
       //home: Landing(),
       initialRoute: '/login',
 
@@ -89,7 +91,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIOverlays([/*SystemUiOverlay.bottom*/]);
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return Injector(

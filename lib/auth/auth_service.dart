@@ -7,10 +7,8 @@ class UserService {
   UserService({UserApi uapi}) : _uapi = uapi;
 
   List<User> _users;
-  User _me;
   String token;
   List<User> get users => _users;
-  User get me => _me;
 
   getUsers() async {
     _users = await _uapi.getUsers();
@@ -27,10 +25,6 @@ class UserService {
   Future logInUser(email, password) async {
     await _uapi.logInUser(email, password);
   }
-
-  // Future getMe() async {
-  //   body = await _uapi.getMe();
-  // }
 
   Future forget() async {
     await _uapi.save("");

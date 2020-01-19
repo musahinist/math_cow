@@ -1,30 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:math_cow/components/app_bar.dart';
-import 'package:math_cow/data/provider/topic_api.dart';
 
-import 'package:math_cow/data/services/topic_service.dart';
-
-import 'package:math_cow/screens/home/card_list_view.dart';
-import 'package:simple_animations/simple_animations.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
+import 'package:math_cow/data/provider/topic_api.dart';
+import 'package:math_cow/data/services/topic_service.dart';
+import 'package:math_cow/screens/home/card_list_view.dart';
+import 'package:simple_animations/simple_animations.dart';
+
 class HomePage extends StatelessWidget {
-  //HomePage({Key key}) : super(key: key);
-  // final tween = MultiTrackTween([
-  //   Track("color1").add(Duration(seconds: 23),
-  //       ColorTween(begin: Color(0x09114D), end: Colors.teal[300])),
-  //   Track("color2").add(Duration(seconds: 17),
-  //       ColorTween(begin: Colors.cyan[200], end: Colors.purpleAccent)),
-  //   Track("color3").add(Duration(seconds: 19),
-  //       ColorTween(begin: Colors.purpleAccent, end: Colors.cyan[300])),
-  // ]);
   final tween = MultiTrackTween([
     Track("color1").add(Duration(seconds: 23),
-        ColorTween(begin: Colors.purple[900], end: Colors.deepOrange[900])),
+        ColorTween(begin: Color(0xFFAD5389), end: Color(0xFFFFC125))),
     Track("color2").add(Duration(seconds: 17),
-        ColorTween(begin: Colors.cyan[900], end: Colors.blueAccent[700])),
+        ColorTween(begin: Color(0xFF845EC2), end: Color(0xFF66C5CC))),
     Track("color3").add(Duration(seconds: 19),
-        ColorTween(begin: Colors.deepPurple[900], end: Colors.teal[400])),
+        ColorTween(begin: Color(0xFF3C1053), end: Color(0xFFF87777))),
   ]);
   @override
   Widget build(BuildContext context) {
@@ -55,23 +45,10 @@ class HomePage extends StatelessWidget {
           initState: () {
             final ReactiveModel<TopicService> topicModelRM =
                 Injector.getAsReactive<TopicService>();
-            topicModelRM.setState((state) => state.getTopics());
+            topicModelRM.setState((state) => state.getMainPageData());
           },
           builder: (context) {
-            //  final ReactiveModel<TopicService> topicModelRM =
-            // Injector.getAsReactive<TopicService>();
-            return Stack(
-              children: <Widget>[
-                CardListView(),
-                TransAppBar(
-                  licon: Icons.toys,
-                  ltext: " 25 Cards",
-                  ctext: "TOPICS",
-                  rtext: "03:00",
-                  ricon: Icons.timelapse,
-                ),
-              ],
-            );
+            return CardListView();
           },
         ),
       ],

@@ -45,6 +45,28 @@ class UserApi {
   }
 
 /////// GET ALL USERS INFO
+  ///
+  Future<String> getMe() async {
+    _token = await read();
+    final response = await http.get(
+      baseUrl + "/api/users/me",
+      headers: {'x-auth-token': '$_token'},
+    );
+
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      throw Exception('Unable to fetch users from the user API');
+    }
+  }
+
+  User parseMe(String responseBody) {
+    print("body in parseMe: $responseBody");
+    final parsed = json.decode(responseBody).cast<String, dynamic>();
+    print("parsed in parseMe: $parsed");
+    return User.fromJson(parsed);
+  }
+
   Future<List<User>> getUsers() async {
     _token = await read();
     final response = await http.get(

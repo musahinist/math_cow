@@ -1,11 +1,13 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:math_cow/components/app_bar.dart';
 import 'package:math_cow/components/circular_progress_indicator.dart';
 import 'package:math_cow/components/progress_indicator.dart';
 import 'package:math_cow/data/model/topic.dart';
 import 'package:math_cow/data/provider/question_api.dart';
 import 'package:math_cow/data/services/question_service..dart';
 import 'package:math_cow/data/services/topic_service.dart';
+import 'package:math_cow/data/services/user_service.dart';
 import 'package:math_cow/screens/game/game.dart';
 import 'package:math_cow/utils/fade_animation.dart';
 import 'package:math_cow/utils/loading_anim.dart';
@@ -28,23 +30,29 @@ class CardListView extends StatelessWidget {
     // setTopics();
 
     return StateBuilder<TopicService>(
-        models: [
-          Injector.getAsReactive<
-              TopicService>(), /*Injector.getAsReactive<QuestionService>()*/
-        ],
+        models: [Injector.getAsReactive<TopicService>()],
         builder: (context, model) {
           return model.whenConnectionState(
-            onIdle: () => null,
+            onIdle: () => Center(child: Loading()),
             onWaiting: () => Center(child: Loading()),
             onError: (_) => null,
-            onData: (store) => Center(
-                //use the `state` getter to get the model state.
-                child: ListView(
-              physics: BouncingScrollPhysics(),
-              children: List<Widget>.generate(store.topics.length,
-                  (i) => _buildTopicsWithData(store.topics[i]))
-                ..insert(0, _hero(context)),
-            )),
+            onData: (store) => Stack(
+              children: <Widget>[
+                ListView(
+                  physics: BouncingScrollPhysics(),
+                  children: List<Widget>.generate(store.topics.length,
+                      (i) => _buildTopicsWithData(store.topics[i]))
+                    ..insert(0, _hero(context)),
+                ),
+                TransAppBar(
+                  licon: Icons.toys,
+                  ltext: store.me.name ?? "0", //"${store.me.name}",
+                  ctext: "TOPICS",
+                  rtext: "03:00",
+                  ricon: Icons.timelapse,
+                ),
+              ],
+            ),
           );
         });
   }
@@ -152,7 +160,7 @@ class CardListView extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.black26,
+          color: Color(0xFFFFB480),
           borderRadius: BorderRadius.circular(5.0),
         ),
         padding: const EdgeInsets.all(20.0),
@@ -164,7 +172,9 @@ class CardListView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(card.cardName, style: TextStyle(color: Colors.white)),
+            Text(card.cardName,
+                style: TextStyle(
+                    color: Color(0xFF5E5E5E), fontWeight: FontWeight.bold)),
             ProgressIndic(percent: Random().nextInt(10)),
           ],
         ),
@@ -182,8 +192,11 @@ class CardListView extends StatelessWidget {
         45,
         20,
       ),
-      color: Colors.black26,
-      child: Text("Continue"),
+      color: Color(0xFFFFB480),
+      child: Text(
+        "Continue",
+        style: TextStyle(color: Color(0xFF5E5E5E)),
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50),
       ),

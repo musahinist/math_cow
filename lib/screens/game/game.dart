@@ -90,24 +90,24 @@ class _GamePageState extends State<GamePage> {
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   _buildDraggable(
-                      Offset(media.width / 2 - media.width * .18,
-                          media.height / 2 - media.width * .18),
-                      //SVG(store.questions[_index].question),
-                      SVG(rawSvg)
-                      // store.questions[_index].question
-                      ),
+                    Offset(media.width / 2 - media.width * .18,
+                        media.height / 2 - media.width * .18),
+                    SVG(store.questions[_index].question),
+                    //SVG(rawSvg)
+                    // store.questions[_index].question
+                  ),
                   Stack(
                     children: <Widget>[
                       _buildDragTargetWithData(
                           store.questions[_index].answers[0].isCorrect,
-                          //SVG(store.questions[_index].answers[0].answer),
-                          SVG(rawSvg),
+                          SVG(store.questions[_index].answers[0].answer),
+                          // SVG(rawSvg),
                           // store.questions[_index].answers[0].answer,
                           ofsetlist[0]),
                       _buildDragTargetWithData(
                           store.questions[_index].answers[1].isCorrect,
-                          //SVG(store.questions[_index].answers[1].answer),
-                          SVG(rawSvg),
+                          SVG(store.questions[_index].answers[1].answer),
+                          //SVG(rawSvg),
                           // store.questions[_index].answers[1].answer,
                           ofsetlist[1]),
                       _buildDragTargetWithData(
@@ -118,8 +118,8 @@ class _GamePageState extends State<GamePage> {
                           ofsetlist[2]),
                       _buildDragTargetWithData(
                           store.questions[_index].answers[3].isCorrect,
-                          //SVG(store.questions[_index].answers[3].answer),
-                          SVG(rawSvg),
+                          SVG(store.questions[_index].answers[3].answer),
+                          // SVG(rawSvg),
                           //store.questions[_index].answers[3].answer,
                           ofsetlist[3]),
                     ],
@@ -182,12 +182,11 @@ class _GamePageState extends State<GamePage> {
                     setState(() {
                       _isDragCompleted = false;
                       _isAnswerCorrect = false;
+                      _index++;
                       if (_index + 1 >= store.questions.length) {
                         _showDialog(store);
                         // Navigator.pop(context);
-                      } else {
-                        _index++;
-                      }
+                      } else {}
                     });
                   },
                 ),
