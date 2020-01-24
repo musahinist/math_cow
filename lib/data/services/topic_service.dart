@@ -18,11 +18,8 @@ class TopicService {
   //   _topics = await _tapi.getTopics();
   // }
   Future getMe() async {
-    print("Call MEE");
     String body = await _uapi.getMe();
-    print(body);
     _me = _uapi.parseMe(body);
-    print("_me: $_me");
   }
 
   Future getMainPageData() async {
@@ -38,7 +35,7 @@ class TopicService {
       // print("prefs topic: $topic");
       _setTopicsFromPrefs();
     } else {
-      _setTopicsFromApiandSavaToPrefs();
+      _setTopicsFromApiandSaveToPrefs();
     }
   }
 
@@ -50,7 +47,7 @@ class TopicService {
     // read();
   }
 
-  Future _setTopicsFromApiandSavaToPrefs() async {
+  Future _setTopicsFromApiandSaveToPrefs() async {
     String body = await _tapi.getTopics();
     _topics = _tapi.parseTopics(body);
     await _save(body);

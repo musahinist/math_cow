@@ -19,7 +19,11 @@ class AppStateBuilderEx extends StatelessWidget {
       initState: () {
         final ReactiveModel<UserService> topicModelRM =
             Injector.getAsReactive<UserService>();
-        topicModelRM.setState((state) => state.getUsers());
+        topicModelRM.setState(
+          (state) {
+            return state.getUsers();
+          },
+        );
       },
       builder: (context) {
         //Use of 'getAsReactive' to get the model.
@@ -56,6 +60,7 @@ class HomePageState extends StatelessWidget {
           return model.whenConnectionState(
             onIdle: () => Center(child: Loading()),
             onWaiting: () => Center(child: Loading()),
+            onError: (_) => Text("error"),
             onData: (store) => DiscoveryPage(store),
             //  Center(
             //   //use the `state` getter to get the model state.
@@ -72,7 +77,6 @@ class HomePageState extends StatelessWidget {
             //     ),
             //   ),
             // ),
-            onError: (_) => Text("error"),
           );
         });
   }

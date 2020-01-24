@@ -12,13 +12,10 @@ class UserService {
   List<User> get users => _users;
   User get me => _me;
 
-  getUsers() async {
+  Future getUsers() async {
     _users = await _uapi.getUsers();
+    print("users name: ${_users.length}");
   }
-
-  // Future postUser(name, email, password) async {
-  //   await _uapi.postUser(name, email, password);
-  // }
 
   Future registerUser(name, email, password) async {
     await _uapi.registerUser(name, email, password);
@@ -27,10 +24,6 @@ class UserService {
   Future logInUser(email, password) async {
     await _uapi.logInUser(email, password);
   }
-
-  // Future getMe() async {
-  //   body = await _uapi.getMe();
-  // }
 
   Future forget() async {
     await _uapi.save("");

@@ -19,29 +19,13 @@ class QuestionApi {
     final value = prefs.get(key) ?? 0;
 
     String url = baseUrl + "/api/questions/$id";
-    print("question api called");
+    // print("question api called");
     final response = await http.get(
       url,
       headers: {'x-auth-token': '$value'},
     );
     if (response.statusCode == 200) {
       return parseQuestions(response.body);
-    } else {
-      throw Exception('Unable to fetch questions from the REST API');
-    }
-  }
-
-  List<Topic> parseTopics(String responseBody) {
-    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-    return parsed.map<Topic>((json) => Topic.fromJson(json)).toList();
-  }
-
-  Future<List<Topic>> getTopics() async {
-    String url = baseUrl + "/api/topics";
-    print("toopic api called");
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      return parseTopics(response.body);
     } else {
       throw Exception('Unable to fetch questions from the REST API');
     }
@@ -54,14 +38,14 @@ class QuestionApi {
     final key = 'token';
     final value = token;
     prefs.setString(key, value);
-    print("$key : $value");
+    // print("$key : $value");
   }
 
   read() async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'token';
     final value = prefs.get(key) ?? 0;
-    print('read : $value');
+    //  print('read : $value');
   }
 
   // Future<List> getData() async {

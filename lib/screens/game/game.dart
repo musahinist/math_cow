@@ -1,49 +1,17 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+
 import "package:flare_flutter/flare_actor.dart";
-import 'package:math_cow/components/app_bar.dart';
-import 'package:math_cow/components/progress_indicator.dart';
-
-import 'package:math_cow/data/services/question_service..dart';
-import 'package:math_cow/screens/home/home.dart';
-import 'package:math_cow/utils/draw_svg.dart';
-
-import 'package:math_cow/utils/loading_anim.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
-class GamePage extends StatefulWidget {
+import 'package:math_cow/data/services/question_service..dart';
+import 'package:math_cow/components/app_bar.dart';
+import 'package:math_cow/components/progress_indicator.dart';
+import 'package:math_cow/utils/draw_svg.dart';
+import 'package:math_cow/utils/loading_anim.dart';
+
+class GamePage extends StatelessWidget {
   final String id;
   const GamePage({Key key, @required this.id}) : super(key: key);
-
-  @override
-  _GamePageState createState() => _GamePageState();
-}
-
-class _GamePageState extends State<GamePage> {
-  bool _isDragCompleted = false;
-  bool _isAnswerCorrect = false;
-  int _counter;
-  int _index;
-  final String rawSvg =
-      '''<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="100px" height="100px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
-<text transform="matrix(1 0 0 1 39.5254 62.5)" fill="#FFFFFF" font-family="RobotoMono" font-size="36">0</text>
-</svg>''';
-  // List<Question> qs;
-  // QuestionApi qapi = QuestionApi();
-
-  // void setCards() async {
-  //   qs = await api.getQuestions(widget.id);
-  // }
-
-  @override
-  void initState() {
-    _counter = 0;
-    _index = 0;
-    // setCards();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,18 +26,20 @@ class _GamePageState extends State<GamePage> {
             ),
             child: StateBuilder<QuestionService>(
               models: [Injector.getAsReactive<QuestionService>()],
-              builder: (contex, model) {
+              builder: (context, model) {
                 return model.whenConnectionState(
                   onIdle: () => Text("idle"),
                   onWaiting: () => Center(child: Loading()),
-                  onData: (store) => _gameStack(store),
+                  onData: (store) => _gameStack(context, store),
                   onError: (_) => Text("error"),
                 );
               },
             )));
   }
 
-  Stack _gameStack(QuestionService store) {
+  Stack _gameStack(BuildContext context, QuestionService store) {
+    final ReactiveModel<QuestionService> questionModelRM =
+        Injector.getAsReactive<QuestionService>(context: context);
     Size media = MediaQuery.of(context).size;
     List<Offset> ofsetlist = [
       Offset(media.width / 8, media.height / 7),
@@ -77,84 +47,37 @@ class _GamePageState extends State<GamePage> {
       Offset(media.width / 8, media.height * 6 / 7 - media.width / 3),
       Offset(media.width * (13 / 24), media.height * 6 / 7 - media.width / 3)
     ]..shuffle();
+
     return Stack(
       children: <Widget>[
         TransAppBar(
           licon: Icons.arrow_back,
-          ctext: "QUESTIONS",
+          ctext: "CARD ${store.cardID}",
           rtext: "03:00",
           ricon: Icons.timelapse,
         ),
-        _isDragCompleted == false
+        store.isDragCompleted == false
             ? Stack(
-                // mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   _buildDraggable(
+                    context,
                     Offset(media.width / 2 - media.width * .18,
                         media.height / 2 - media.width * .18),
-                    SVG(store.questions[_index].question),
-                    //SVG(rawSvg)
-                    // store.questions[_index].question
+                    SVG(store.questions[store.index].question),
                   ),
                   Stack(
                     children: <Widget>[
-                      _buildDragTargetWithData(
-                          store.questions[_index].answers[0].isCorrect,
-                          SVG(store.questions[_index].answers[0].answer),
-                          // SVG(rawSvg),
-                          // store.questions[_index].answers[0].answer,
-                          ofsetlist[0]),
-                      _buildDragTargetWithData(
-                          store.questions[_index].answers[1].isCorrect,
-                          SVG(store.questions[_index].answers[1].answer),
-                          //SVG(rawSvg),
-                          // store.questions[_index].answers[1].answer,
-                          ofsetlist[1]),
-                      _buildDragTargetWithData(
-                          store.questions[_index].answers[2].isCorrect,
-                          SVG(store.questions[_index].answers[2].answer),
-                          //SVG(rawSvg),
-                          //store.questions[_index].answers[2].answer,
-                          ofsetlist[2]),
-                      _buildDragTargetWithData(
-                          store.questions[_index].answers[3].isCorrect,
-                          SVG(store.questions[_index].answers[3].answer),
-                          // SVG(rawSvg),
-                          //store.questions[_index].answers[3].answer,
-                          ofsetlist[3]),
+                      _buildDragTargetWithData(context, 0, ofsetlist[0], store),
+                      _buildDragTargetWithData(context, 1, ofsetlist[1], store),
+                      _buildDragTargetWithData(context, 2, ofsetlist[2], store),
+                      _buildDragTargetWithData(context, 3, ofsetlist[3], store),
                     ],
                   ),
-                  // Positioned(
-                  //     bottom: 60,
-                  //     right: media.width / 2 - 30,
-                  //     child: Container(
-                  //       width: 60,
-                  //       height: 60,
-                  //       child: FlareActor(
-                  //         "animations/timer.flr",
-                  //         alignment: Alignment.center,
-                  //         fit: BoxFit.contain,
-                  //         sizeFromArtboard: true,
-                  //         animation: "playBw",
-                  //         callback: (a) {
-                  //           setState(() {
-                  //             // _isDragCompleted = false;
-                  //             // _isAnswerCorrect = false;
-                  //             // if (_index >= 1) {
-                  //             //   _showDialog(store);
-                  //             //   // Navigator.pop(context);
-                  //             // } else {
-                  //             //   _index++;
-                  //             // }
-                  //           });
-                  //         },
-                  //       ),
-                  //     )),
                   Positioned(
                     bottom: 20,
                     right: 20,
                     child: ProgressIndic(
-                      percent: _counter,
+                      percent: store.correctCounter,
                     ),
                   ),
                   Positioned(
@@ -171,7 +94,7 @@ class _GamePageState extends State<GamePage> {
               )
             : Center(
                 child: FlareActor(
-                  _isAnswerCorrect
+                  store.isAnswerCorrect
                       ? "animations/success.flr"
                       : "animations/fail.flr",
                   alignment: Alignment.center,
@@ -179,15 +102,18 @@ class _GamePageState extends State<GamePage> {
                   sizeFromArtboard: true,
                   animation: "patlama",
                   callback: (a) {
-                    setState(() {
-                      _isDragCompleted = false;
-                      _isAnswerCorrect = false;
-                      _index++;
-                      if (_index + 1 >= store.questions.length) {
-                        _showDialog(store);
-                        // Navigator.pop(context);
-                      } else {}
-                    });
+                    questionModelRM.setState(
+                      (state) {
+                        if (store.index + 1 < store.questions.length) {
+                          store.indexIncrement();
+                          store.toggleDragCompleted(false);
+                          store.toggleAnswerCorrect(false);
+                        } else {
+                          store.addUserData();
+                          _showDialog(context, store);
+                        }
+                      },
+                    );
                   },
                 ),
               ),
@@ -195,7 +121,7 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
-  Widget _buildDraggable(Offset ofset, SVG svg) {
+  Widget _buildDraggable(BuildContext context, Offset ofset, SVG svg) {
     Size media = MediaQuery.of(context).size;
     return Positioned(
       top: ofset.dy,
@@ -224,13 +150,14 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
-  Widget _buildDragTargetWithData(bool isAnswer, SVG svg, Offset ofset) {
+  Widget _buildDragTargetWithData(
+      BuildContext context, int index, Offset ofset, QuestionService store) {
+    final ReactiveModel<QuestionService> questionModelRM =
+        Injector.getAsReactive<QuestionService>(context: context);
     Size media = MediaQuery.of(context).size;
     return Positioned(
       top: ofset.dy,
       left: ofset.dx,
-      // right: 0.0,
-      //  bottom: 0.0,
       child: DragTarget(
         builder: (BuildContext context, List<String> candidateData,
             List<dynamic> rejectedData) {
@@ -238,23 +165,30 @@ class _GamePageState extends State<GamePage> {
               candidateData.toString() +
               " , rejectedData = " +
               rejectedData.toString());
-          return buildCircledBox(svg, media.width / 3, color: Colors.black12);
+          return buildCircledBox(
+              SVG(store.questions[store.index].answers[index].answer),
+              media.width / 3,
+              color: Colors.black12);
         },
         onWillAccept: (data) {
           print("onWillAccept and data:$data");
           return true; // return true or false. can use and/or
         },
         onAccept: (data) {
-          setState(() {
-            if (isAnswer) {
-              _counter++;
+          questionModelRM.setState((state) {
+            if (store.questions[store.index].answers[index].isCorrect) {
+              //store.correctCounter++;
               // _counter < 10 ? _counter++ : _counter = 0;
-              _isAnswerCorrect = true;
+              store.toggleAnswerCorrect(true);
+              store.correctCounter++;
+            } else {
+              store.wrongCounter++;
             }
-            _isDragCompleted = true;
+
+            store.toggleDragCompleted(true);
           });
 
-          print("onAccept and data:$data counter:$_counter");
+          print("onAccept and data:$data counter:$store.counter");
         },
         onLeave: (data) {
           print("onLeave and data:$data");
@@ -274,7 +208,9 @@ class _GamePageState extends State<GamePage> {
         child: svg);
   }
 
-  void _showDialog(QuestionService qs) {
+  void _showDialog(BuildContext context, QuestionService qs) {
+    final ReactiveModel<QuestionService> questionModelRM =
+        Injector.getAsReactive<QuestionService>(context: context);
     showGeneralDialog(
         context: context,
         barrierDismissible: true,
@@ -306,12 +242,14 @@ class _GamePageState extends State<GamePage> {
                       sizeFromArtboard: true,
                       animation: "Untitled",
                       callback: (a) {
-                        setState(() {
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              '/app', ModalRoute.withName("/app"));
-                          //  Navigator.pop(context);
-                          // Navigator.of(context).pushReplacementNamed('/app');
-                        });
+                        // questionModelRM.setState((state) {
+                        //   state.addUserData();
+                        // });
+
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/app', ModalRoute.withName("/app"));
+
+                        // Navigator.pop(context);
                       },
                     ),
                   ),

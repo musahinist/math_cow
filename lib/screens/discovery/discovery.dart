@@ -140,7 +140,7 @@ class DiscoveryPage extends StatelessWidget {
         TransAppBar(
           licon: Icons.toys,
           ltext: " 25 Cards",
-          ctext: "TOPICS",
+          ctext: "DISCOVERY",
           rtext: "03:00",
           ricon: Icons.timelapse,
         ),

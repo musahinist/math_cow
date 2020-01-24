@@ -1,0 +1,19 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTI4OWU5NTBhOGRlNTAwMDRkMThkOWYiLCJlbWFpbCI6ImZnZmdmZ2ZnQGZnZmdmZ2ZnLmZnZmdmZyIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE1Nzk3MjAzNDJ9.lkzn1Ve8g7rJqUC1swa41sGh5f660SPebvMXiTQsBDE
+
+###
+POST http://mathcow.herokuapp.com/api/cardends 
+x-auth-token: {{token}}
+content-type: application/json
+accept: application/json
+
+{
+    "userID": "5e289e950a8de50004d18d9f",
+    "points": 10,
+    "correctQuestions": 12,
+    "wrongQuestions": 5,
+    "finishedCards": [{"topicID": "101", "cardID": "103"}]
+}
+
+   
+    
+    

@@ -13,8 +13,8 @@ class SVG extends StatelessWidget {
   SVG(this.rawSvg);
 
   String formatSvg(String rawSvg) {
-    print(
-        rawSvg.replaceAll(RegExp('''fill="#FFFFFF"'''), '''fill="#FF0000"'''));
+    // print(
+    //     rawSvg.replaceAll(RegExp('''fill="#FFFFFF"'''), '''fill="#FF0000"'''));
     return rawSvg
         .replaceAll(RegExp('''fill="#FFFFFF"'''), '''fill="#FF0000"''');
   }

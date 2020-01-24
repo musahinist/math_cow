@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'package:math_cow/data/model/user.dart';
 import 'dart:convert';
@@ -44,8 +46,8 @@ class UserApi {
     }
   }
 
-/////// GET ALL USERS INFO
-  ///
+  /// GET my info ofr Currenrt User
+
   Future<String> getMe() async {
     _token = await read();
     final response = await http.get(
@@ -61,12 +63,30 @@ class UserApi {
   }
 
   User parseMe(String responseBody) {
-    print("body in parseMe: $responseBody");
+    print(responseBody);
     final parsed = json.decode(responseBody).cast<String, dynamic>();
-    print("parsed in parseMe: $parsed");
     return User.fromJson(parsed);
   }
 
+  /// Add info to Current User
+  Future addUserData(body) async {
+    var token = await read();
+
+    final response = await http.post(baseUrl + "/api/cardends",
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          "x-auth-token": "$token"
+        },
+        body: body);
+    //  print(response.statusCode);
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      throw Exception('Unable to fetch users from the user API');
+    }
+  }
+
+/////// GET ALL USERS INFO
   Future<List<User>> getUsers() async {
     _token = await read();
     final response = await http.get(
@@ -82,10 +102,12 @@ class UserApi {
   }
 
   List<User> _parseUsers(String responseBody) {
+    //print(responseBody); ///////////////////////////////
     final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
     return parsed.map<User>((json) => User.fromJson(json)).toList();
   }
 
+  /// Save to Shared
   save(String token) async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'token';
@@ -93,6 +115,7 @@ class UserApi {
     prefs.setString(key, value);
   }
 
+  /// Read from Shared
   Future<String> read() async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'token';

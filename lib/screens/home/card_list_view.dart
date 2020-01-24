@@ -41,12 +41,13 @@ class CardListView extends StatelessWidget {
                 ListView(
                   physics: BouncingScrollPhysics(),
                   children: List<Widget>.generate(store.topics.length,
-                      (i) => _buildTopicsWithData(store.topics[i]))
-                    ..insert(0, _hero(context)),
+                      (i) => _buildTopicsWithData(store.topics[i], store))
+                    ..insert(0, _hero(context, store)),
                 ),
                 TransAppBar(
                   licon: Icons.toys,
-                  ltext: store.me.name ?? "0", //"${store.me.name}",
+                  ltext: "${store.me.finishedCards.length} Card" ??
+                      "0", //"${store.me.name}",
                   ctext: "TOPICS",
                   rtext: "03:00",
                   ricon: Icons.timelapse,
@@ -57,7 +58,7 @@ class CardListView extends StatelessWidget {
         });
   }
 
-  Container _hero(BuildContext context) => Container(
+  Container _hero(BuildContext context, TopicService store) => Container(
         // height: MediaQuery.of(context).size.height / 4,
         // decoration: BoxDecoration(color: Colors.green),
         child: Column(
@@ -99,7 +100,8 @@ class CardListView extends StatelessWidget {
                   //     title: "Continue",
                   //     color: Colors.orange[800],
                   //     margin: 210),
-                  _withRoundedRectangleBorder(context, i, cardID, topicID),
+                  _withRoundedRectangleBorder(
+                      context, i, cardID, topicID, store.me.sId),
                 ],
               ),
             ),
@@ -107,7 +109,7 @@ class CardListView extends StatelessWidget {
         ),
       );
 
-  Widget _buildTopicsWithData(Topic data) {
+  Widget _buildTopicsWithData(Topic data, TopicService store) {
     return FadeAnimation(
       0.2,
       Container(
@@ -126,8 +128,8 @@ class CardListView extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 physics: BouncingScrollPhysics(),
                 itemCount: data.cards.length,
-                itemBuilder: (context, i) =>
-                    _buildSubjectCard(context, i, data.cards[i], data.topicID),
+                itemBuilder: (context, i) => _buildSubjectCard(
+                    context, i, data.cards[i], data.topicID, store.me.sId),
               ),
             ),
           ],
@@ -137,7 +139,7 @@ class CardListView extends StatelessWidget {
   }
 
   Widget _buildSubjectCard(
-      BuildContext context, int i, Cards card, String topicID) {
+      BuildContext context, int i, Cards card, String topicID, String userID) {
     return GestureDetector(
       onTap: () {
         this.i = i;
@@ -152,8 +154,11 @@ class CardListView extends StatelessWidget {
                   initState: () {
                     final ReactiveModel<QuestionService> questionModelRM =
                         Injector.getAsReactive<QuestionService>();
-                    questionModelRM.setState((state) =>
-                        state.getQuestions("$topicID/${card.cardID}"));
+                    questionModelRM.setState((state) async {
+                      await state.getQuestions("$topicID/${card.cardID}");
+                      state.setCardandTopicId(cardId: cardID, topicId: topicID);
+                      state.userID = userID;
+                    });
                   },
                   builder: (context) => GamePage(id: "$topicID/${card.cardID}"),
                 )));
@@ -182,8 +187,8 @@ class CardListView extends StatelessWidget {
     );
   }
 
-  Widget _withRoundedRectangleBorder(
-      BuildContext context, int i, String cardID, String topicID) {
+  Widget _withRoundedRectangleBorder(BuildContext context, int i, String cardID,
+      String topicID, String userID) {
     return RaisedButton(
       elevation: 0,
       padding: const EdgeInsets.fromLTRB(
@@ -210,8 +215,11 @@ class CardListView extends StatelessWidget {
                   initState: () {
                     final ReactiveModel<QuestionService> questionModelRM =
                         Injector.getAsReactive<QuestionService>();
-                    questionModelRM.setState(
-                        (state) => state.getQuestions("$topicID/$cardID"));
+                    questionModelRM.setState((state) async {
+                      state.setCardandTopicId(cardId: cardID, topicId: topicID);
+                      state.userID = userID;
+                      await state.getQuestions("$topicID/$cardID");
+                    });
                   },
                   builder: (context) => GamePage(id: "$topicID/$cardID"),
                 )));

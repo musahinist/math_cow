@@ -7,12 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class TopicApi {
   static const baseUrl = "http://mathcow.herokuapp.com";
 
-  List<Topic> parseTopics(String responseBody) {
-    // print(responseBody);
-    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-    return parsed.map<Topic>((json) => Topic.fromJson(json)).toList();
-  }
-
   // Future<List<Topic>> getTopics() async {
   //   String url = baseUrl + "/api/topics";
   //   print("toopic api called");
@@ -27,7 +21,7 @@ class TopicApi {
     final prefs = await SharedPreferences.getInstance();
     final key = 'token';
     final value = prefs.get(key) ?? 0;
-    print(value);
+    // print(value);
 
     String url = baseUrl + "/api/topics";
     print("toopic api called");
@@ -40,5 +34,11 @@ class TopicApi {
     } else {
       throw Exception('Unable to fetch questions from the topic REST API');
     }
+  }
+
+  List<Topic> parseTopics(String responseBody) {
+    // print(responseBody);
+    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+    return parsed.map<Topic>((json) => Topic.fromJson(json)).toList();
   }
 }
