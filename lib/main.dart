@@ -33,16 +33,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark, /*fontFamily: 'RobotoMono'*/
       ),
-      //home: Landing(),
-      initialRoute: '/login',
+      home: App(),
+      // initialRoute: '/app',
 
-      routes: {
-        // When navigating to the "/" route, build the FirstScreen widget.
-        '/login': (BuildContext context) => LogIn(),
-        // When navigating to the "/second" route, build the SecondScreen widget.
-        '/app': (BuildContext context) => App(),
-        '/home': (BuildContext context) => HomePage(),
-      },
+      // routes: {
+      //   // When navigating to the "/" route, build the FirstScreen widget.
+      //   '/login': (BuildContext context) => LogIn(),
+      //   // When navigating to the "/second" route, build the SecondScreen widget.
+      //   '/app': (BuildContext context) => App(),
+      //   '/home': (BuildContext context) => HomePage(),
+      // },
     );
   }
 }
@@ -83,49 +83,24 @@ class _AppState extends State<App> {
     FlipGame(),
     ScrollAnimation(),
   ];
-  // @override
-  // void initState() {
-  //   _index = 0;
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    _index = 0;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-    return Injector(
-        inject: [Inject<TopicService>(() => TopicService(tapi: TopicApi()))],
-        initState: () {
-          final ReactiveModel<TopicService> topicModelRM =
-              Injector.getAsReactive<TopicService>();
-          topicModelRM.setState((state) {
-            //  state.getTopics();
-            _index = 0;
-          });
-        },
-        builder: (context) {
-          return StateBuilder<TopicService>(
-              models: [
-                Injector.getAsReactive<
-                    TopicService>(), /*Injector.getAsReactive<QuestionService>()*/
-              ],
-              builder: (context, model) {
-                return model.whenConnectionState(
-                    onIdle: () => Center(child: Loading()),
-                    onWaiting: () => Center(child: Loading()),
-                    onError: (_) => Text("errrrr"),
-                    onData: (snapshot) {
-                      return Scaffold(
-                        body: _page.elementAt(_index),
-                        bottomNavigationBar: BottomNavBar(setIndex: (i) {
-                          model.setState((state) {
-                            _index = i;
-                          });
-                        }),
-                      );
-                    });
-              });
+    return Scaffold(
+      body: _page.elementAt(_index),
+      bottomNavigationBar: BottomNavBar(setIndex: (i) {
+        setState(() {
+          _index = i;
         });
+      }),
+    );
   }
 }

@@ -45,7 +45,8 @@ class HomePage extends StatelessWidget {
           initState: () {
             final ReactiveModel<TopicService> topicModelRM =
                 Injector.getAsReactive<TopicService>();
-            topicModelRM.setState((state) => state.getMainPageData());
+            topicModelRM
+                .setState((state) async => await state.getMainPageData());
           },
           builder: (context) {
             return CardListView();

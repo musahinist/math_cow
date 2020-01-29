@@ -1,7 +1,7 @@
 class Question {
   int correctNumber;
   int wrongNumber;
-  int questionLevel;
+  num questionLevel;
   String sId;
   String topicID;
   String cardID;

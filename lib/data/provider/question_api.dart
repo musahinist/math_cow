@@ -19,12 +19,13 @@ class QuestionApi {
     final value = prefs.get(key) ?? 0;
 
     String url = baseUrl + "/api/questions/$id";
-    // print("question api called");
+    print("question api called");
     final response = await http.get(
       url,
       headers: {'x-auth-token': '$value'},
     );
     if (response.statusCode == 200) {
+      print(response.body);
       return parseQuestions(response.body);
     } else {
       throw Exception('Unable to fetch questions from the REST API');

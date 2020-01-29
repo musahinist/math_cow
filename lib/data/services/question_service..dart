@@ -14,6 +14,8 @@ class QuestionService {
   bool _isAnswerCorrect = false;
   int correctCounter = 0;
   int wrongCounter = 0;
+  //String qID;
+  List _questionsAnswerList = [];
   int _index = 0;
   Map data;
   String userID;
@@ -28,11 +30,15 @@ class QuestionService {
   String get topicID => _topicID;
   bool get isDragCompleted => _isDragCompleted;
   bool get isAnswerCorrect => _isAnswerCorrect;
-
+  List get questionsAnswerList => _questionsAnswerList;
   List<Question> get questions => _questions;
   Question get question => _question;
 
   ///SETTER
+  pushAnswerToList(String qID, bool isCorrect) {
+    _questionsAnswerList.add({"question_id": qID, "isCorrect": isCorrect});
+  }
+
   setCardandTopicId({String cardId, String topicId}) {
     _cardID = cardId;
     _topicID = topicId;
@@ -66,14 +72,16 @@ class QuestionService {
 
   Future addUserData() async {
     data = {
-      "userID": userID,
+      "user_id": userID,
       "points": correctCounter * 3,
       "correctQuestions": correctCounter,
       "wrongQuestions": wrongCounter,
       "finishedCards": [
         {"topicID": _topicID, "cardID": _cardID}
-      ]
+      ],
+      "finishedQuestions": questionsAnswerList
     };
+    print(data);
     var body = json.encode(data);
     return await _uapi.addUserData(body);
   }

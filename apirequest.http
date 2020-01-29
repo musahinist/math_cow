@@ -1,7 +1,8 @@
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTI4OWU5NTBhOGRlNTAwMDRkMThkOWYiLCJlbWFpbCI6ImZnZmdmZ2ZnQGZnZmdmZ2ZnLmZnZmdmZyIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE1Nzk3MjAzNDJ9.lkzn1Ve8g7rJqUC1swa41sGh5f660SPebvMXiTQsBDE
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTMwYWU0MzQ2YjIxNjAwMDQ4NTNkNjUiLCJlbWFpbCI6Imd1ZXN0MTU4MDI0ODY0MzQzMUBtYXRoY293LmNvbSIsImlzQWRtaW4iOmZhbHNlLCJpc0dvbGQiOmZhbHNlLCJpYXQiOjE1ODAyNDg2NDN9.YqWzQhfItAYEOgt2w7wOt_RoBIS1xkKFKNpN5Pk35Vw
+@baseURL = http://mathcow.herokuapp.com/api
 
-###
-POST http://mathcow.herokuapp.com/api/cardends 
+### 
+POST {{baseURL}}/cardends 
 x-auth-token: {{token}}
 content-type: application/json
 accept: application/json
@@ -14,6 +15,8 @@ accept: application/json
     "finishedCards": [{"topicID": "101", "cardID": "103"}]
 }
 
-   
-    
-    
+
+### 
+GET {{baseURL}}/questions/101/101
+x-auth-token: {{token}}
+content-type: application/json

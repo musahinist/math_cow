@@ -28,6 +28,25 @@ class UserApi {
     }
   }
 
+  ////// REGISTER GUEST
+  Future registerGuestUser() async {
+    final response = await http.post(
+      baseUrl + "/api/users/guest",
+      body: {},
+      headers: {'x-auth-token': 'application/json'},
+    );
+    var status = response.body.contains('error');
+    var data = json.decode(response.body);
+    _token = response.headers['x-auth-token'];
+    if (status) {
+      print('data : ${data["error"]}');
+      print('error error errr');
+    } else {
+      await save(_token);
+      return _token;
+    }
+  }
+
 //////// LOGIN
   Future logInUser(String email, String password) async {
     final response = await http.post(
@@ -56,6 +75,7 @@ class UserApi {
     );
 
     if (response.statusCode == 200) {
+      print(response.body);
       return response.body;
     } else {
       throw Exception('Unable to fetch users from the user API');
@@ -63,7 +83,6 @@ class UserApi {
   }
 
   User parseMe(String responseBody) {
-    print(responseBody);
     final parsed = json.decode(responseBody).cast<String, dynamic>();
     return User.fromJson(parsed);
   }
@@ -78,8 +97,9 @@ class UserApi {
           "x-auth-token": "$token"
         },
         body: body);
-    //  print(response.statusCode);
+    //  print(response.body);
     if (response.statusCode == 200) {
+      //   print(response.body);
       return response.body;
     } else {
       throw Exception('Unable to fetch users from the user API');

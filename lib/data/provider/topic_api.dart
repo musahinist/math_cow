@@ -24,7 +24,7 @@ class TopicApi {
     // print(value);
 
     String url = baseUrl + "/api/topics";
-    print("toopic api called");
+    //  print("toopic api called");
     final response = await http.get(
       url,
       headers: {'x-auth-token': '$value'},
@@ -37,7 +37,6 @@ class TopicApi {
   }
 
   List<Topic> parseTopics(String responseBody) {
-    // print(responseBody);
     final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
     return parsed.map<Topic>((json) => Topic.fromJson(json)).toList();
   }

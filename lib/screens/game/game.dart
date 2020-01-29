@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import "package:flare_flutter/flare_actor.dart";
+import 'package:math_cow/screens/home/home.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
 import 'package:math_cow/data/services/question_service..dart';
@@ -42,13 +43,14 @@ class GamePage extends StatelessWidget {
         Injector.getAsReactive<QuestionService>(context: context);
     Size media = MediaQuery.of(context).size;
     List<Offset> ofsetlist = [
-      Offset(media.width / 8, media.height / 7),
-      Offset(media.width * (13 / 24), media.height / 7),
-      Offset(media.width / 8, media.height * 6 / 7 - media.width / 3),
-      Offset(media.width * (13 / 24), media.height * 6 / 7 - media.width / 3)
+      Offset(0, media.height / 7),
+      Offset(media.width / 2, media.height / 7),
+      Offset(0, media.height * 6 / 7 - media.width / 3),
+      Offset(media.width / 2, media.height * 6 / 7 - media.width / 3)
     ]..shuffle();
 
     return Stack(
+      //alignment: AlignmentDirectional.center,
       children: <Widget>[
         TransAppBar(
           licon: Icons.arrow_back,
@@ -58,10 +60,11 @@ class GamePage extends StatelessWidget {
         ),
         store.isDragCompleted == false
             ? Stack(
+                alignment: AlignmentDirectional.center,
                 children: <Widget>[
                   _buildDraggable(
                     context,
-                    Offset(media.width / 2 - media.width * .18,
+                    Offset(0 /*media.width / 2 - media.width * .18*/,
                         media.height / 2 - media.width * .18),
                     SVG(store.questions[store.index].question),
                   ),
@@ -123,30 +126,30 @@ class GamePage extends StatelessWidget {
 
   Widget _buildDraggable(BuildContext context, Offset ofset, SVG svg) {
     Size media = MediaQuery.of(context).size;
-    return Positioned(
-      top: ofset.dy,
-      left: ofset.dx,
-      child: Draggable(
-        child: buildCircledBox(svg, media.width * .36, color: Colors.black12),
-        feedback:
-            buildCircledBox(svg, media.width * .36, color: Colors.transparent),
-        childWhenDragging:
-            Container(), // buildCircledBox("+1", color:Colors.grey[300]),
-        data: "Musa", //can be list etc.
-        onDragStarted: () {},
-        onDragCompleted: () {
-          print("onDragCompleted");
-        },
-        onDragEnd: (details) {
-          print("onDragEnd Accept = " + details.wasAccepted.toString());
-          print("onDragEnd Velocity = " +
-              details.velocity.pixelsPerSecond.distance.toString());
-          print("onDragEnd Offeset= " + details.offset.direction.toString());
-        },
-        onDraggableCanceled: (Velocity velocity, Offset offset) {
-          print("onDraggableCanceled " + velocity.toString());
-        },
-      ),
+    return Draggable(
+      maxSimultaneousDrags: 1,
+      ignoringFeedbackSemantics: false,
+      dragAnchor: DragAnchor.child,
+      child: buildBox(svg, media.width, media.width / 3 /*media.width * .36*/
+          ), //buildCircledBox(svg, media.width * .36, color: Colors.black12),
+      feedback: buildBox(svg, media.width, media.width / 3 /*media.width * .36*/
+          ),
+      childWhenDragging:
+          Container(), // buildCircledBox("+1", color:Colors.grey[300]),
+      data: "Musa", //can be list etc.
+      onDragStarted: () {},
+      onDragCompleted: () {
+        print("onDragCompleted");
+      },
+      onDragEnd: (details) {
+        print("onDragEnd Accept = " + details.wasAccepted.toString());
+        print("onDragEnd Velocity = " +
+            details.velocity.pixelsPerSecond.distance.toString());
+        print("onDragEnd Offeset= " + details.offset.direction.toString());
+      },
+      onDraggableCanceled: (Velocity velocity, Offset offset) {
+        print("onDraggableCanceled " + velocity.toString());
+      },
     );
   }
 
@@ -165,10 +168,10 @@ class GamePage extends StatelessWidget {
               candidateData.toString() +
               " , rejectedData = " +
               rejectedData.toString());
-          return buildCircledBox(
+          return buildBox(
               SVG(store.questions[store.index].answers[index].answer),
-              media.width / 3,
-              color: Colors.black12);
+              media.width / 2,
+              media.width / 3);
         },
         onWillAccept: (data) {
           print("onWillAccept and data:$data");
@@ -181,8 +184,10 @@ class GamePage extends StatelessWidget {
               // _counter < 10 ? _counter++ : _counter = 0;
               store.toggleAnswerCorrect(true);
               store.correctCounter++;
+              store.pushAnswerToList(store.questions[store.index].sId, true);
             } else {
               store.wrongCounter++;
+              store.pushAnswerToList(store.questions[store.index].sId, false);
             }
 
             store.toggleDragCompleted(true);
@@ -197,14 +202,14 @@ class GamePage extends StatelessWidget {
     );
   }
 
-  Container buildCircledBox(SVG svg, double size, {Color color}) {
+  Widget buildBox(SVG svg, double width, double height) {
     return Container(
-        width: size,
-        height: size,
+        width: width,
+        height: height,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(size / 2),
-          color: color,
-        ),
+            //  borderRadius: BorderRadius.circular(size / 2),
+            // color: color,
+            ),
         child: svg);
   }
 
@@ -245,9 +250,10 @@ class GamePage extends StatelessWidget {
                         // questionModelRM.setState((state) {
                         //   state.addUserData();
                         // });
-
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/app', ModalRoute.withName("/app"));
+                        Navigator.of(context)
+                            .popUntil(ModalRoute.withName('/'));
+                        // Navigator.of(context).pushNamedAndRemoveUntil(
+                        //     '/app', ModalRoute.withName("/app"));
 
                         // Navigator.pop(context);
                       },

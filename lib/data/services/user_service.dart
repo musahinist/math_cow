@@ -14,7 +14,7 @@ class UserService {
 
   Future getUsers() async {
     _users = await _uapi.getUsers();
-    print("users name: ${_users.length}");
+    //   print("users name: ${_users.length}");
   }
 
   Future registerUser(name, email, password) async {
