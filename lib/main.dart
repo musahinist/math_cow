@@ -30,9 +30,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MathCow',
-      theme: ThemeData(
-        brightness: Brightness.dark, /*fontFamily: 'RobotoMono'*/
-      ),
+      theme: ThemeData(brightness: Brightness.dark, fontFamily: 'RobotoMono'),
       home: App(),
       // initialRoute: '/app',
 

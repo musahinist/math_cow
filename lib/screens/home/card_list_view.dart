@@ -91,7 +91,7 @@ class CardListView extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  ProgressIndic(percent: Random().nextInt(10)),
+                  ProgressIndic(cpercent: Random().nextInt(10)),
                   SizedBox(
                     height: 20,
                   ),
@@ -180,7 +180,7 @@ class CardListView extends StatelessWidget {
             Text(card.cardName,
                 style: TextStyle(
                     color: Color(0xFF5E5E5E), fontWeight: FontWeight.bold)),
-            ProgressIndic(percent: Random().nextInt(10)),
+            ProgressIndic(cpercent: Random().nextInt(10)),
           ],
         ),
       ),

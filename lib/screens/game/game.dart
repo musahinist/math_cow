@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
 import "package:flare_flutter/flare_actor.dart";
-import 'package:math_cow/screens/home/home.dart';
+import 'package:math_cow/components/flipper.dart';
+import 'package:math_cow/data/model/question.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
-
 import 'package:math_cow/data/services/question_service..dart';
 import 'package:math_cow/components/app_bar.dart';
 import 'package:math_cow/components/progress_indicator.dart';
@@ -12,12 +11,12 @@ import 'package:math_cow/utils/loading_anim.dart';
 
 class GamePage extends StatelessWidget {
   final String id;
-  const GamePage({Key key, @required this.id}) : super(key: key);
+  GamePage({Key key, @required this.id}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomPadding: false,
+        //  resizeToAvoidBottomPadding: false,
         body: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -31,7 +30,8 @@ class GamePage extends StatelessWidget {
                 return model.whenConnectionState(
                   onIdle: () => Text("idle"),
                   onWaiting: () => Center(child: Loading()),
-                  onData: (store) => _gameStack(context, store),
+                  onData: (store) =>
+                      _gameStack(context, store), //FlipGame(), //
                   onError: (_) => Text("error"),
                 );
               },
@@ -41,6 +41,8 @@ class GamePage extends StatelessWidget {
   Stack _gameStack(BuildContext context, QuestionService store) {
     final ReactiveModel<QuestionService> questionModelRM =
         Injector.getAsReactive<QuestionService>(context: context);
+    var questions = store.questions;
+    List shuffuleAnswer = [1, 2, 3, 4, 5]..shuffle();
     Size media = MediaQuery.of(context).size;
     List<Offset> ofsetlist = [
       Offset(0, media.height / 7),
@@ -66,21 +68,26 @@ class GamePage extends StatelessWidget {
                     context,
                     Offset(0 /*media.width / 2 - media.width * .18*/,
                         media.height / 2 - media.width * .18),
-                    SVG(store.questions[store.index].question),
+                    SVG(questions[0].question),
                   ),
                   Stack(
                     children: <Widget>[
-                      _buildDragTargetWithData(context, 0, ofsetlist[0], store),
-                      _buildDragTargetWithData(context, 1, ofsetlist[1], store),
-                      _buildDragTargetWithData(context, 2, ofsetlist[2], store),
-                      _buildDragTargetWithData(context, 3, ofsetlist[3], store),
+                      _buildDragTargetWithData(
+                          context, 0, ofsetlist[0], store, questions),
+                      _buildDragTargetWithData(context, shuffuleAnswer[1],
+                          ofsetlist[1], store, questions),
+                      _buildDragTargetWithData(context, shuffuleAnswer[2],
+                          ofsetlist[2], store, questions),
+                      _buildDragTargetWithData(context, shuffuleAnswer[3],
+                          ofsetlist[3], store, questions),
                     ],
                   ),
                   Positioned(
                     bottom: 20,
                     right: 20,
                     child: ProgressIndic(
-                      percent: store.correctCounter,
+                      cpercent: store.correctCounter,
+                      wpercent: store.wrongCounter,
                     ),
                   ),
                   Positioned(
@@ -107,7 +114,7 @@ class GamePage extends StatelessWidget {
                   callback: (a) {
                     questionModelRM.setState(
                       (state) {
-                        if (store.index + 1 < store.questions.length) {
+                        if (store.index + 1 < 25) {
                           store.indexIncrement();
                           store.toggleDragCompleted(false);
                           store.toggleAnswerCorrect(false);
@@ -153,8 +160,8 @@ class GamePage extends StatelessWidget {
     );
   }
 
-  Widget _buildDragTargetWithData(
-      BuildContext context, int index, Offset ofset, QuestionService store) {
+  Widget _buildDragTargetWithData(BuildContext context, int index, Offset ofset,
+      QuestionService store, List<Question> questions) {
     final ReactiveModel<QuestionService> questionModelRM =
         Injector.getAsReactive<QuestionService>(context: context);
     Size media = MediaQuery.of(context).size;
@@ -168,10 +175,8 @@ class GamePage extends StatelessWidget {
               candidateData.toString() +
               " , rejectedData = " +
               rejectedData.toString());
-          return buildBox(
-              SVG(store.questions[store.index].answers[index].answer),
-              media.width / 2,
-              media.width / 3);
+          return buildBox(SVG(questions[0].answers[index].answer),
+              media.width / 2, media.width / 3);
         },
         onWillAccept: (data) {
           print("onWillAccept and data:$data");
@@ -179,15 +184,15 @@ class GamePage extends StatelessWidget {
         },
         onAccept: (data) {
           questionModelRM.setState((state) {
-            if (store.questions[store.index].answers[index].isCorrect) {
+            if (questions[0].answers[index].isCorrect) {
               //store.correctCounter++;
               // _counter < 10 ? _counter++ : _counter = 0;
               store.toggleAnswerCorrect(true);
               store.correctCounter++;
-              store.pushAnswerToList(store.questions[store.index].sId, true);
+              store.pushAnswerToList(questions[0].sId, true);
             } else {
               store.wrongCounter++;
-              store.pushAnswerToList(store.questions[store.index].sId, false);
+              store.pushAnswerToList(questions[0].sId, false);
             }
 
             store.toggleDragCompleted(true);
@@ -214,8 +219,8 @@ class GamePage extends StatelessWidget {
   }
 
   void _showDialog(BuildContext context, QuestionService qs) {
-    final ReactiveModel<QuestionService> questionModelRM =
-        Injector.getAsReactive<QuestionService>(context: context);
+    // final ReactiveModel<QuestionService> questionModelRM =
+    //     Injector.getAsReactive<QuestionService>(context: context);
     showGeneralDialog(
         context: context,
         barrierDismissible: true,

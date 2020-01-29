@@ -15,8 +15,8 @@ class SVG extends StatelessWidget {
   String formatSvg(String rawSvg) {
     // print(
     //     rawSvg.replaceAll(RegExp('''fill="#FFFFFF"'''), '''fill="#FF0000"'''));
-    return rawSvg
-        .replaceAll(RegExp('''fill="#FFFFFF"'''), '''fill="#FF0000"''');
+    return rawSvg.replaceAll(
+        RegExp("font-family='RobotoMono-Regular'"), "font-family='RobotoMono'");
   }
 
   displaySVG() async {

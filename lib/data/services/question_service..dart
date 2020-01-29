@@ -17,6 +17,7 @@ class QuestionService {
   //String qID;
   List _questionsAnswerList = [];
   int _index = 0;
+
   Map data;
   String userID;
 
@@ -31,7 +32,7 @@ class QuestionService {
   bool get isDragCompleted => _isDragCompleted;
   bool get isAnswerCorrect => _isAnswerCorrect;
   List get questionsAnswerList => _questionsAnswerList;
-  List<Question> get questions => _questions;
+  List<Question> get questions => _questions..shuffle();
   Question get question => _question;
 
   ///SETTER
