@@ -43,7 +43,7 @@ class SVG extends StatelessWidget {
         future: displaySVG(),
         builder: (context, snapshot) {
           return CustomPaint(
-            //child: (),
+            child: Container(),
             foregroundPainter: snapshot.data,
 
             // child: SvgPicture.asset(assetName,

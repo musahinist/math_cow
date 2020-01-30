@@ -7,7 +7,7 @@ class FlipGame extends StatelessWidget {
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context).size;
     return GridView.count(
-      padding: EdgeInsets.symmetric(vertical: 50),
+      padding: EdgeInsets.symmetric(vertical: 70),
       childAspectRatio: (media.width / 3) / (media.height / 4.9),
       // Create a grid with 3 columns. If you change the scrollDirection to
       // horizontal, this produces 3 rows.

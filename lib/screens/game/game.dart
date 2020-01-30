@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import "package:flare_flutter/flare_actor.dart";
 import 'package:math_cow/components/flipper.dart';
 import 'package:math_cow/data/model/question.dart';
+import 'package:math_cow/screens/game/drag-drop-game.dart';
+import 'package:math_cow/screens/game/flip_game.dart';
+import 'package:math_cow/screens/game/tinder_game.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:math_cow/data/services/question_service..dart';
 import 'package:math_cow/components/app_bar.dart';
@@ -30,27 +33,39 @@ class GamePage extends StatelessWidget {
                 return model.whenConnectionState(
                   onIdle: () => Text("idle"),
                   onWaiting: () => Center(child: Loading()),
-                  onData: (store) =>
-                      _gameStack(context, store), //FlipGame(), //
+                  onData: (store) {
+                    var questions = store.questions;
+                    return _gameStack(context, store, questions);
+                  }, //FlipGame(), //
                   onError: (_) => Text("error"),
                 );
               },
             )));
   }
 
-  Stack _gameStack(BuildContext context, QuestionService store) {
+  Stack _gameStack(
+      BuildContext context, QuestionService store, List<Question> questions) {
     final ReactiveModel<QuestionService> questionModelRM =
         Injector.getAsReactive<QuestionService>(context: context);
-    var questions = store.questions;
-    List shuffuleAnswer = [1, 2, 3, 4, 5]..shuffle();
-    Size media = MediaQuery.of(context).size;
-    List<Offset> ofsetlist = [
-      Offset(0, media.height / 7),
-      Offset(media.width / 2, media.height / 7),
-      Offset(0, media.height * 6 / 7 - media.width / 3),
-      Offset(media.width / 2, media.height * 6 / 7 - media.width / 3)
+    // var questions = store.questions;
+    // List shuffuleAnswer = [1, 2, 3, 4, 5]..shuffle();
+    // Size media = MediaQuery.of(context).size;
+    // List<Offset> ofsetlist = [
+    //   Offset(0, media.height / 7),
+    //   Offset(media.width / 2, media.height / 7),
+    //   Offset(0, media.height * 6 / 7 - media.width / 3),
+    //   Offset(media.width / 2, media.height * 6 / 7 - media.width / 3)
+    // ]..shuffle();
+    var gameList = [
+      TinderGame(
+        store: store,
+        questions: questions,
+      ),
+      DragDropGame(
+        store: store,
+        questions: questions,
+      ),
     ]..shuffle();
-
     return Stack(
       //alignment: AlignmentDirectional.center,
       children: <Widget>[
@@ -64,24 +79,8 @@ class GamePage extends StatelessWidget {
             ? Stack(
                 alignment: AlignmentDirectional.center,
                 children: <Widget>[
-                  _buildDraggable(
-                    context,
-                    Offset(0 /*media.width / 2 - media.width * .18*/,
-                        media.height / 2 - media.width * .18),
-                    SVG(questions[0].question),
-                  ),
-                  Stack(
-                    children: <Widget>[
-                      _buildDragTargetWithData(
-                          context, 0, ofsetlist[0], store, questions),
-                      _buildDragTargetWithData(context, shuffuleAnswer[1],
-                          ofsetlist[1], store, questions),
-                      _buildDragTargetWithData(context, shuffuleAnswer[2],
-                          ofsetlist[2], store, questions),
-                      _buildDragTargetWithData(context, shuffuleAnswer[3],
-                          ofsetlist[3], store, questions),
-                    ],
-                  ),
+                  gameList[0],
+                  // FlipGame(),
                   Positioned(
                     bottom: 20,
                     right: 20,
@@ -120,7 +119,7 @@ class GamePage extends StatelessWidget {
                           store.toggleAnswerCorrect(false);
                         } else {
                           store.addUserData();
-                          _showDialog(context, store);
+                          return _showDialog(context, store);
                         }
                       },
                     );
@@ -129,93 +128,6 @@ class GamePage extends StatelessWidget {
               ),
       ],
     );
-  }
-
-  Widget _buildDraggable(BuildContext context, Offset ofset, SVG svg) {
-    Size media = MediaQuery.of(context).size;
-    return Draggable(
-      maxSimultaneousDrags: 1,
-      ignoringFeedbackSemantics: false,
-      dragAnchor: DragAnchor.child,
-      child: buildBox(svg, media.width, media.width / 3 /*media.width * .36*/
-          ), //buildCircledBox(svg, media.width * .36, color: Colors.black12),
-      feedback: buildBox(svg, media.width, media.width / 3 /*media.width * .36*/
-          ),
-      childWhenDragging:
-          Container(), // buildCircledBox("+1", color:Colors.grey[300]),
-      data: "Musa", //can be list etc.
-      onDragStarted: () {},
-      onDragCompleted: () {
-        print("onDragCompleted");
-      },
-      onDragEnd: (details) {
-        print("onDragEnd Accept = " + details.wasAccepted.toString());
-        print("onDragEnd Velocity = " +
-            details.velocity.pixelsPerSecond.distance.toString());
-        print("onDragEnd Offeset= " + details.offset.direction.toString());
-      },
-      onDraggableCanceled: (Velocity velocity, Offset offset) {
-        print("onDraggableCanceled " + velocity.toString());
-      },
-    );
-  }
-
-  Widget _buildDragTargetWithData(BuildContext context, int index, Offset ofset,
-      QuestionService store, List<Question> questions) {
-    final ReactiveModel<QuestionService> questionModelRM =
-        Injector.getAsReactive<QuestionService>(context: context);
-    Size media = MediaQuery.of(context).size;
-    return Positioned(
-      top: ofset.dy,
-      left: ofset.dx,
-      child: DragTarget(
-        builder: (BuildContext context, List<String> candidateData,
-            List<dynamic> rejectedData) {
-          print("candidateData = " +
-              candidateData.toString() +
-              " , rejectedData = " +
-              rejectedData.toString());
-          return buildBox(SVG(questions[0].answers[index].answer),
-              media.width / 2, media.width / 3);
-        },
-        onWillAccept: (data) {
-          print("onWillAccept and data:$data");
-          return true; // return true or false. can use and/or
-        },
-        onAccept: (data) {
-          questionModelRM.setState((state) {
-            if (questions[0].answers[index].isCorrect) {
-              //store.correctCounter++;
-              // _counter < 10 ? _counter++ : _counter = 0;
-              store.toggleAnswerCorrect(true);
-              store.correctCounter++;
-              store.pushAnswerToList(questions[0].sId, true);
-            } else {
-              store.wrongCounter++;
-              store.pushAnswerToList(questions[0].sId, false);
-            }
-
-            store.toggleDragCompleted(true);
-          });
-
-          print("onAccept and data:$data counter:$store.counter");
-        },
-        onLeave: (data) {
-          print("onLeave and data:$data");
-        },
-      ),
-    );
-  }
-
-  Widget buildBox(SVG svg, double width, double height) {
-    return Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-            //  borderRadius: BorderRadius.circular(size / 2),
-            // color: color,
-            ),
-        child: svg);
   }
 
   void _showDialog(BuildContext context, QuestionService qs) {
@@ -290,6 +202,7 @@ class GamePage extends StatelessWidget {
             ),
           );
         });
+
     // flutter defined function
     // showDialog(
     //     context: context,
@@ -331,4 +244,91 @@ class GamePage extends StatelessWidget {
     //       );
     //     });
   }
+  // Widget _buildDraggable(BuildContext context, Offset ofset, SVG svg) {
+  //   Size media = MediaQuery.of(context).size;
+  //   return Draggable(
+  //     maxSimultaneousDrags: 1,
+  //     ignoringFeedbackSemantics: false,
+  //     dragAnchor: DragAnchor.child,
+  //     child: buildBox(svg, media.width, media.width / 3 /*media.width * .36*/
+  //         ), //buildCircledBox(svg, media.width * .36, color: Colors.black12),
+  //     feedback: buildBox(svg, media.width, media.width / 3 /*media.width * .36*/
+  //         ),
+  //     childWhenDragging:
+  //         Container(), // buildCircledBox("+1", color:Colors.grey[300]),
+  //     data: "Musa", //can be list etc.
+  //     onDragStarted: () {},
+  //     onDragCompleted: () {
+  //       print("onDragCompleted");
+  //     },
+  //     onDragEnd: (details) {
+  //       print("onDragEnd Accept = " + details.wasAccepted.toString());
+  //       print("onDragEnd Velocity = " +
+  //           details.velocity.pixelsPerSecond.distance.toString());
+  //       print("onDragEnd Offeset= " + details.offset.direction.toString());
+  //     },
+  //     onDraggableCanceled: (Velocity velocity, Offset offset) {
+  //       print("onDraggableCanceled " + velocity.toString());
+  //     },
+  //   );
+  // }
+
+  // Widget _buildDragTargetWithData(BuildContext context, int index, Offset ofset,
+  //     QuestionService store, List<Question> questions) {
+  //   final ReactiveModel<QuestionService> questionModelRM =
+  //       Injector.getAsReactive<QuestionService>(context: context);
+  //   Size media = MediaQuery.of(context).size;
+  //   return Positioned(
+  //     top: ofset.dy,
+  //     left: ofset.dx,
+  //     child: DragTarget(
+  //       builder: (BuildContext context, List<String> candidateData,
+  //           List<dynamic> rejectedData) {
+  //         print("candidateData = " +
+  //             candidateData.toString() +
+  //             " , rejectedData = " +
+  //             rejectedData.toString());
+  //         return buildBox(SVG(questions[0].answers[index].answer),
+  //             media.width / 2, media.width / 3);
+  //       },
+  //       onWillAccept: (data) {
+  //         print("onWillAccept and data:$data");
+  //         return true; // return true or false. can use and/or
+  //       },
+  //       onAccept: (data) {
+  //         questionModelRM.setState((state) {
+  //           if (questions[0].answers[index].isCorrect) {
+  //             //store.correctCounter++;
+  //             // _counter < 10 ? _counter++ : _counter = 0;
+  //             store.toggleAnswerCorrect(true);
+  //             store.correctCounter++;
+  //             store.pushAnswerToList(questions[0].sId, true);
+  //           } else {
+  //             store.wrongCounter++;
+  //             store.pushAnswerToList(questions[0].sId, false);
+  //           }
+
+  //           store.toggleDragCompleted(true);
+  //         });
+
+  //         print("onAccept and data:$data counter:$store.counter");
+  //       },
+  //       onLeave: (data) {
+  //         print("onLeave and data:$data");
+  //       },
+  //     ),
+  //   );
+  // }
+
+  // Widget buildBox(SVG svg, double width, double height) {
+  //   return Container(
+  //       width: width,
+  //       height: height,
+  //       decoration: BoxDecoration(
+  //           //  borderRadius: BorderRadius.circular(size / 2),
+  //           // color: color,
+  //           ),
+  //       child: svg);
+  // }
+
 }
