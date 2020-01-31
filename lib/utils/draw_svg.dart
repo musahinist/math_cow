@@ -20,8 +20,7 @@ class SVG extends StatelessWidget {
   }
 
   displaySVG() async {
-    final DrawableRoot svgRoot =
-        await svg.fromSvgString(formatSvg(rawSvg), formatSvg(rawSvg));
+    final DrawableRoot svgRoot = await svg.fromSvgString(rawSvg, rawSvg);
 //     svgRoot.scaleCanvasToViewBox(canvas, Size(500, 500));
 
 // // Optional, but probably normally desireable: ensure the SVG isn't rendered
@@ -43,7 +42,7 @@ class SVG extends StatelessWidget {
         future: displaySVG(),
         builder: (context, snapshot) {
           return CustomPaint(
-            child: Container(),
+            // child: Container(),
             foregroundPainter: snapshot.data,
 
             // child: SvgPicture.asset(assetName,
@@ -64,8 +63,7 @@ class CurvePainter extends CustomPainter {
     svg.scaleCanvasToViewBox(canvas, size);
     //svg.clipCanvasToViewBox(canvas);
 
-    svg.draw(
-        canvas, ColorFilter.mode(Colors.white, BlendMode.color), Rect.largest);
+    svg.draw(canvas, Rect.largest);
     // svg.children[1].draw(canvas,
     //     ColorFilter.mode(Colors.white, BlendMode.hardLight), Rect.largest);
     // ColorFilter.srgbToLinearGamma()

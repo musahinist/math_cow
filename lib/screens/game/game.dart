@@ -4,7 +4,8 @@ import 'package:math_cow/components/flipper.dart';
 import 'package:math_cow/data/model/question.dart';
 import 'package:math_cow/screens/game/drag-drop-game.dart';
 import 'package:math_cow/screens/game/flip_game.dart';
-import 'package:math_cow/screens/game/tinder_game.dart';
+import 'package:math_cow/screens/game/tinder-card.dart';
+
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:math_cow/data/services/question_service..dart';
 import 'package:math_cow/components/app_bar.dart';
@@ -57,14 +58,11 @@ class GamePage extends StatelessWidget {
     //   Offset(media.width / 2, media.height * 6 / 7 - media.width / 3)
     // ]..shuffle();
     var gameList = [
-      TinderGame(
-        store: store,
-        questions: questions,
-      ),
       DragDropGame(
         store: store,
         questions: questions,
       ),
+      TinderCard(questions: questions[0], store: store),
     ]..shuffle();
     return Stack(
       //alignment: AlignmentDirectional.center,
@@ -80,7 +78,6 @@ class GamePage extends StatelessWidget {
                 alignment: AlignmentDirectional.center,
                 children: <Widget>[
                   gameList[0],
-                  // FlipGame(),
                   Positioned(
                     bottom: 20,
                     right: 20,
