@@ -20,11 +20,6 @@ class ProgressIndic extends StatelessWidget {
                 color: Colors.black.withAlpha(40),
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: Container(
-                margin: EdgeInsets.only(left: (50.0 - wpercent * 2)),
-                decoration: BoxDecoration(
-                    color: Colors.red, borderRadius: BorderRadius.circular(5)),
-              ),
             ),
             Container(
               width: 50,
@@ -35,7 +30,7 @@ class ProgressIndic extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: Container(
-                margin: EdgeInsets.only(right: (50.0 - cpercent * 2)),
+                margin: EdgeInsets.only(right: (50.0 - cpercent * 10)),
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(5)),
@@ -51,7 +46,7 @@ class ProgressIndic extends StatelessWidget {
         Container(
           margin: EdgeInsets.only(left: 10),
           child: Text(
-            "$cpercent/25",
+            "$cpercent/10",
             style: TextStyle(
                 color: Colors.black.withAlpha(80),
                 fontSize: 10,

@@ -42,7 +42,8 @@ class SVG extends StatelessWidget {
         future: displaySVG(),
         builder: (context, snapshot) {
           return CustomPaint(
-            // child: Container(),
+            //size: Size(200, 100),
+            child: Center(),
             foregroundPainter: snapshot.data,
 
             // child: SvgPicture.asset(assetName,
@@ -63,7 +64,7 @@ class CurvePainter extends CustomPainter {
     svg.scaleCanvasToViewBox(canvas, size);
     //svg.clipCanvasToViewBox(canvas);
 
-    svg.draw(canvas, Rect.largest);
+    svg.draw(canvas, Rect.zero);
     // svg.children[1].draw(canvas,
     //     ColorFilter.mode(Colors.white, BlendMode.hardLight), Rect.largest);
     // ColorFilter.srgbToLinearGamma()

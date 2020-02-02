@@ -26,17 +26,18 @@ class HomePage extends StatelessWidget {
           duration: tween.duration,
           builder: (context, animation) {
             return Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomLeft,
-                  colors: [
-                    animation["color1"],
-                    animation["color2"],
-                    animation["color3"]
-                  ],
-                ),
-              ),
+              color: Colors.amber[800],
+              // decoration: BoxDecoration(
+              //   gradient: LinearGradient(
+              //     begin: Alignment.topCenter,
+              //     end: Alignment.bottomLeft,
+              //     colors: [
+              //       animation["color1"],
+              //       animation["color2"],
+              //       animation["color3"]
+              //     ],
+              //   ),
+              // ),
             );
           },
         ),

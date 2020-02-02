@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:math_cow/data/services/question_service..dart';
 import 'package:math_cow/utils/draw_svg.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
@@ -11,6 +12,15 @@ class TinderCard extends StatelessWidget {
   final store;
 
   TinderCard({this.store, this.questions});
+  Color color(SwiperPosition dir, double prgrs) {
+    if (dir == SwiperPosition.Right) {
+      return Color.fromRGBO(0, 200, 50, 1 - 0.01 * prgrs);
+    } else if (dir == SwiperPosition.Left) {
+      return Color.fromRGBO(200, 50, 0, 1 - 0.01 * prgrs);
+    }
+    return Color.fromRGBO(255, 255, 0, .6);
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -20,53 +30,62 @@ class TinderCard extends StatelessWidget {
 
     return Stack(
       children: <Widget>[
-        Positioned(
-          bottom: 100,
-          left: 90,
-          child: Icon(
-            Icons.cancel,
-            color: Colors.red,
-            size: 80.0,
-          ),
-        ),
-        Positioned(
-          bottom: 100,
-          right: 90,
-          child: Icon(
-            Icons.check_circle,
-            color: Colors.green,
-            size: 80.0,
-          ),
-        ),
+        // Positioned(
+        //   bottom: size.height * .1,
+        //   left: size.width * .1,
+        //   child: Icon(
+        //     Icons.cancel,
+        //     color: Colors.red,
+        //     size: size.width * .2,
+        //   ),
+        // ),
+        // Positioned(
+        //   bottom: size.height * .1,
+        //   right: size.width * .1,
+        //   child: Icon(
+        //     Icons.check_circle,
+        //     color: Colors.green,
+        //     size: size.width * .2,
+        //   ),
+        // ),
         SwipeStack(
           children: [0].map(
             (int index) {
               return SwiperItem(
                 builder: (SwiperPosition position, double progress) {
                   return Padding(
-                    padding: EdgeInsets.fromLTRB(
-                        size.width * .1, size.height * .25, size.width * .1, 0),
+                    padding: EdgeInsets.fromLTRB(size.width * .05,
+                        size.height * .25, size.width * .05, 0),
                     child: Material(
                       elevation: 4,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       child: Container(
                         height: size.height * .4,
                         decoration: BoxDecoration(
-                          color: Colors.orange[800],
+                          color: color(position, progress),
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Container(
-                                width: size.width * .8,
+                                width: size.width,
                                 height: size.height * .2,
-                                child: SVG(questions.question)),
+                                child: Center(
+                                  child: SvgPicture.string(
+                                    questions.question,
+                                    allowDrawingOutsideViewBox: true,
+                                  ),
+                                )),
                             Container(
-                                width: size.width * .4,
+                                width: size.width * .5,
                                 height: size.height * .2,
-                                child:
-                                    SVG(questions.answers[randIndex].answer)),
+                                child: Center(
+                                  child: SvgPicture.string(
+                                    questions.answers[randIndex].answer,
+                                    allowDrawingOutsideViewBox: true,
+                                  ),
+                                )),
                           ],
                         ),
                       ),

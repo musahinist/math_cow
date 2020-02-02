@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:math_cow/data/model/question.dart';
 import 'package:math_cow/data/services/question_service..dart';
 import 'package:math_cow/utils/draw_svg.dart';
@@ -26,7 +27,7 @@ class DragDropGame extends StatelessWidget {
           context,
           Offset(0 /*media.width / 2 - media.width * .18*/,
               media.height / 2 - media.width * .18),
-          SVG(questions[0].question),
+          questions[0].question,
         ),
         Stack(
           children: <Widget>[
@@ -44,7 +45,7 @@ class DragDropGame extends StatelessWidget {
     );
   }
 
-  Widget _buildDraggable(BuildContext context, Offset ofset, SVG svg) {
+  Widget _buildDraggable(BuildContext context, Offset ofset, String svg) {
     Size media = MediaQuery.of(context).size;
     return Draggable(
       maxSimultaneousDrags: 1,
@@ -88,8 +89,8 @@ class DragDropGame extends StatelessWidget {
               candidateData.toString() +
               " , rejectedData = " +
               rejectedData.toString());
-          return buildBox(SVG(questions[0].answers[index].answer),
-              media.width / 2, media.width / 3);
+          return buildBox(questions[0].answers[index].answer, media.width / 2,
+              media.width / 3);
         },
         onWillAccept: (data) {
           print("onWillAccept and data:$data");
@@ -120,14 +121,20 @@ class DragDropGame extends StatelessWidget {
     );
   }
 
-  Widget buildBox(SVG svg, double width, double height) {
+  Widget buildBox(String svg, double width, double height) {
     return Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-            //  borderRadius: BorderRadius.circular(size / 2),
-            // color: color,
-            ),
-        child: svg);
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+          //  borderRadius: BorderRadius.circular(size / 2),
+          // color: color,
+          ),
+      child: Center(
+        child: SvgPicture.string(
+          svg,
+          allowDrawingOutsideViewBox: true,
+        ),
+      ),
+    );
   }
 }

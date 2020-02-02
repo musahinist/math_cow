@@ -63,6 +63,7 @@ class GamePage extends StatelessWidget {
         questions: questions,
       ),
       TinderCard(questions: questions[0], store: store),
+      //FlipGame()
     ]..shuffle();
     return Stack(
       //alignment: AlignmentDirectional.center,
@@ -110,11 +111,16 @@ class GamePage extends StatelessWidget {
                   callback: (a) {
                     questionModelRM.setState(
                       (state) {
-                        if (store.index + 1 < 25) {
+                        if (store.index + 1 < 10 && store.correctCounter < 5) {
                           store.indexIncrement();
                           store.toggleDragCompleted(false);
                           store.toggleAnswerCorrect(false);
+                        } else if (store.correctCounter == 5) {
+                          store.points;
+                          store.addUserData();
+                          return _showDialog(context, store);
                         } else {
+                          store.points;
                           store.addUserData();
                           return _showDialog(context, store);
                         }
@@ -127,7 +133,7 @@ class GamePage extends StatelessWidget {
     );
   }
 
-  void _showDialog(BuildContext context, QuestionService qs) {
+  void _showDialog(BuildContext context, QuestionService store) {
     // final ReactiveModel<QuestionService> questionModelRM =
     //     Injector.getAsReactive<QuestionService>(context: context);
     showGeneralDialog(
@@ -155,11 +161,14 @@ class GamePage extends StatelessWidget {
                     width: 250,
                     height: 200,
                     child: FlareActor(
-                      "animations/congrats.flr",
+                      store.correctCounter == 2
+                          ? "animations/congrats.flr"
+                          : "animations/fail.flr",
                       alignment: Alignment.center,
                       fit: BoxFit.contain,
                       sizeFromArtboard: true,
-                      animation: "Untitled",
+                      animation:
+                          store.correctCounter == 2 ? "Untitled" : "patlama",
                       callback: (a) {
                         // questionModelRM.setState((state) {
                         //   state.addUserData();
@@ -178,7 +187,7 @@ class GamePage extends StatelessWidget {
                   //   style: TextStyle(fontSize: 16, inherit: false),
                   // ),
                   Text(
-                    "Congrats",
+                    store.correctCounter == 2 ? "Congrats" : "Try Again",
                     style: TextStyle(fontSize: 20, inherit: false),
                   ),
                   // RaisedButton(

@@ -21,9 +21,9 @@ class CardListView extends StatelessWidget {
   // void setTopics() {
   //   topics = api.getTopics();
   // }
-  int i = 0;
-  String cardID = "101";
-  String topicID = "101";
+  int hj = 0;
+  String hcardID = "101";
+  String htopicID = "101";
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class CardListView extends StatelessWidget {
                 ListView(
                   physics: BouncingScrollPhysics(),
                   children: List<Widget>.generate(store.topics.length,
-                      (i) => _buildTopicsWithData(store.topics[i], store))
+                      (i) => _buildTopicsWithData(store.topics[i], store, i))
                     ..insert(0, _hero(context, store)),
                 ),
                 TransAppBar(
@@ -101,7 +101,7 @@ class CardListView extends StatelessWidget {
                   //     color: Colors.orange[800],
                   //     margin: 210),
                   _withRoundedRectangleBorder(
-                      context, i, cardID, topicID, store.me.sId),
+                      context, hj, hcardID, htopicID, store.me.sId),
                 ],
               ),
             ),
@@ -109,7 +109,7 @@ class CardListView extends StatelessWidget {
         ),
       );
 
-  Widget _buildTopicsWithData(Topic data, TopicService store) {
+  Widget _buildTopicsWithData(Topic data, TopicService store, int i) {
     return FadeAnimation(
       0.2,
       Container(
@@ -118,9 +118,6 @@ class CardListView extends StatelessWidget {
           children: <Widget>[
             ListTile(
               title: Text(data.topicName),
-              leading: Icon(
-                Icons.speaker_notes,
-              ),
             ),
             Container(
               height: 120.0,
@@ -128,8 +125,8 @@ class CardListView extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 physics: BouncingScrollPhysics(),
                 itemCount: data.cards.length,
-                itemBuilder: (context, i) => _buildSubjectCard(
-                    context, i, data.cards[i], data.topicID, store.me.sId),
+                itemBuilder: (context, j) => _buildSubjectCard(
+                    context, j, data.cards[j], data.topicID, store, i),
               ),
             ),
           ],
@@ -138,38 +135,52 @@ class CardListView extends StatelessWidget {
     );
   }
 
-  Widget _buildSubjectCard(
-      BuildContext context, int i, Cards card, String topicID, String userID) {
+  Widget _buildSubjectCard(BuildContext context, int j, Cards card,
+      String topicID, TopicService store, i) {
     return GestureDetector(
       onTap: () {
-        this.i = i;
-        this.cardID = card.cardID;
-        this.topicID = topicID;
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => Injector(
-                  inject: [
-                    Inject<QuestionService>(
-                        () => QuestionService(qapi: QuestionApi()))
-                  ],
-                  initState: () {
-                    final ReactiveModel<QuestionService> questionModelRM =
-                        Injector.getAsReactive<QuestionService>();
-                    questionModelRM.setState((state) async {
-                      await state.getQuestions("$topicID/${card.cardID}");
-                      state.setCardandTopicId(cardId: cardID, topicId: topicID);
-                      state.userID = userID;
-                    });
-                  },
-                  builder: (context) => GamePage(id: "$topicID/${card.cardID}"),
-                )));
+        if ((store.me.finishedCards.length > j &&
+                topicID == store.me.finishedCards[j].topicID) ||
+            (j == 0) ||
+            (store.me.finishedCards.length == j &&
+                "${101 + i}" == store.me.finishedCards[j - 1].topicID)) {
+          this.hj = j;
+          this.hcardID = card.cardID;
+          this.htopicID = topicID;
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => Injector(
+                    inject: [
+                      Inject<QuestionService>(
+                          () => QuestionService(qapi: QuestionApi()))
+                    ],
+                    initState: () {
+                      final ReactiveModel<QuestionService> questionModelRM =
+                          Injector.getAsReactive<QuestionService>();
+                      questionModelRM.setState((state) async {
+                        await state.getQuestions("$topicID/${card.cardID}");
+                        state.setCardandTopicId(
+                            cardId: hcardID, topicId: htopicID);
+                        state.userID = store.me.sId;
+                      });
+                    },
+                    builder: (context) =>
+                        GamePage(id: "$topicID/${card.cardID}"),
+                  )));
+        }
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Color(0xFFFFB480),
+          color: (store.me.finishedCards.length > j &&
+                      topicID == store.me.finishedCards[j].topicID) ||
+                  j == 0 ||
+                  (store.me.finishedCards.length == j &&
+                      "${101 + i}" == store.me.finishedCards[j - 1].topicID)
+              ? Colors.grey[800]
+              : Colors.grey[500],
           borderRadius: BorderRadius.circular(5.0),
         ),
         padding: const EdgeInsets.all(20.0),
-        margin: i == 0
+        margin: j == 0
             ? const EdgeInsets.only(left: 20.0)
             : const EdgeInsets.only(left: 10.0),
         width: 160.0,
@@ -177,14 +188,36 @@ class CardListView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(card.cardName,
-                style: TextStyle(
-                    color: Color(0xFF5E5E5E), fontWeight: FontWeight.bold)),
-            ProgressIndic(cpercent: Random().nextInt(10)),
+            Text(card.cardName, style: TextStyle(fontWeight: FontWeight.bold)),
+            _cardLock(store, j, topicID, i),
           ],
         ),
       ),
     );
+  }
+
+  Widget _cardLock(TopicService store, int j, String topicID, i) {
+    if (store.me.finishedCards.length > j &&
+        topicID == store.me.finishedCards[j].topicID) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Icon(Icons.star,
+              color: store.me.finishedCards[j].accuracyPercentageInCard < 50
+                  ? Colors.red
+                  : Colors.amber[800]),
+          Text(store.me.finishedCards[j].accuracyPercentageInCard
+              .toStringAsFixed(1))
+        ],
+      );
+    } else if (j == 0) {
+      return Icon(Icons.lock_open);
+    } else if (store.me.finishedCards.length == j &&
+        "${101 + i}" == store.me.finishedCards[j - 1].topicID) {
+      return Icon(Icons.lock_open);
+    } else {
+      return Icon(Icons.lock);
+    }
   }
 
   Widget _withRoundedRectangleBorder(BuildContext context, int i, String cardID,
@@ -197,10 +230,10 @@ class CardListView extends StatelessWidget {
         45,
         20,
       ),
-      color: Color(0xFFFFB480),
+      color: Colors.grey[800],
       child: Text(
         "Continue",
-        style: TextStyle(color: Color(0xFF5E5E5E)),
+        // style: TextStyle(color: Colors.amber[800]),
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50),

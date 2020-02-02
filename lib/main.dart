@@ -15,6 +15,8 @@ import 'package:math_cow/utils/exp_state_builder.dart';
 import 'package:math_cow/utils/loading_anim.dart';
 import 'package:math_cow/utils/scroll_animation.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
+import 'package:math_cow/utils/deneme.dart';
+import 'package:math_cow/utils/finger-paint.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MathCow',
-      theme: ThemeData(brightness: Brightness.dark, fontFamily: 'RobotoMono'),
+      theme: ThemeData(brightness: Brightness.dark),
       home: App(),
       // initialRoute: '/app',
 
@@ -72,6 +74,8 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   int _index;
   List<Widget> _page = [
+    //   Deneme(),
+    // FingerPaint(),
     HomePage(),
 
     AppStateBuilderEx(),

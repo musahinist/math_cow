@@ -7,13 +7,14 @@ class QuestionService {
   QuestionApi _qapi;
   UserApi _uapi = UserApi();
   QuestionService({QuestionApi qapi}) : _qapi = qapi;
-
+  String _feedback;
   String _cardID;
   String _topicID;
   bool _isDragCompleted = false;
   bool _isAnswerCorrect = false;
   int correctCounter = 0;
   int wrongCounter = 0;
+  int _points;
   //String qID;
   List _questionsAnswerList = [];
   int _index = 0;
@@ -25,7 +26,10 @@ class QuestionService {
   Question _question;
 
   ///GETTER
-
+  String get feedBack =>
+      _feedback = correctCounter == 20 ? "Congrats" : "Try Again";
+  int get points => _points =
+      correctCounter <= wrongCounter ? (correctCounter - wrongCounter) * 3 : 0;
   int get index => _index;
   String get cardID => _cardID;
   String get topicID => _topicID;
@@ -74,7 +78,7 @@ class QuestionService {
   Future addUserData() async {
     data = {
       "user_id": userID,
-      "points": correctCounter * 3,
+      "points": _points,
       "correctQuestions": correctCounter,
       "wrongQuestions": wrongCounter,
       "finishedCards": [
@@ -87,3 +91,4 @@ class QuestionService {
     return await _uapi.addUserData(body);
   }
 }
+//  {user_id: 5e30c7aad3b1950004b6942c, points: 6, correctQuestions: 2, wrongQuestions: 0, finishedCards: [{topicID: 101, cardID: 101}], finishedQuestions: [{question_id: 5e31df7154c0bf0004ba8394, isCorrect: true}, {question_id: 5e31ddb054c0bf0004ba8332, isCorrect: true}]}
