@@ -16,7 +16,7 @@ class TinderCard extends StatelessWidget {
     if (dir == SwiperPosition.Right) {
       return Color.fromRGBO(0, 200, 50, 1 - 0.01 * prgrs);
     } else if (dir == SwiperPosition.Left) {
-      return Color.fromRGBO(200, 50, 0, 1 - 0.01 * prgrs);
+      return Color.fromRGBO(255, 99, 71, 1 - 0.01 * prgrs);
     }
     return Color.fromRGBO(255, 255, 0, .6);
   }

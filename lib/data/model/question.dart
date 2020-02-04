@@ -1,4 +1,6 @@
 class Question {
+  List<int> layoutType;
+  List<String> trainingQuestion;
   int correctNumber;
   int wrongNumber;
   num questionLevel;
@@ -8,10 +10,11 @@ class Question {
   String questionID;
   String question;
   List<Answers> answers;
-  int iV;
 
   Question(
-      {this.correctNumber,
+      {this.layoutType,
+      this.trainingQuestion,
+      this.correctNumber,
       this.wrongNumber,
       this.questionLevel,
       this.sId,
@@ -19,10 +22,11 @@ class Question {
       this.cardID,
       this.questionID,
       this.question,
-      this.answers,
-      this.iV});
+      this.answers});
 
   Question.fromJson(Map<String, dynamic> json) {
+    layoutType = json['layoutType'].cast<int>();
+    trainingQuestion = json['trainingQuestion'].cast<String>();
     correctNumber = json['correctNumber'];
     wrongNumber = json['wrongNumber'];
     questionLevel = json['questionLevel'];
@@ -37,11 +41,12 @@ class Question {
         answers.add(new Answers.fromJson(v));
       });
     }
-    iV = json['__v'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['layoutType'] = this.layoutType;
+    data['trainingQuestion'] = this.trainingQuestion;
     data['correctNumber'] = this.correctNumber;
     data['wrongNumber'] = this.wrongNumber;
     data['questionLevel'] = this.questionLevel;
@@ -53,27 +58,23 @@ class Question {
     if (this.answers != null) {
       data['answers'] = this.answers.map((v) => v.toJson()).toList();
     }
-    data['__v'] = this.iV;
     return data;
   }
 }
 
 class Answers {
-  String sId;
   String answer;
   bool isCorrect;
 
-  Answers({this.sId, this.answer, this.isCorrect});
+  Answers({this.answer, this.isCorrect});
 
   Answers.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
     answer = json['answer'];
     isCorrect = json['isCorrect'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
     data['answer'] = this.answer;
     data['isCorrect'] = this.isCorrect;
     return data;

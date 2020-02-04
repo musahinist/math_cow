@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import "package:flare_flutter/flare_actor.dart";
-import 'package:math_cow/components/flipper.dart';
+
 import 'package:math_cow/data/model/question.dart';
 import 'package:math_cow/screens/game/drag-drop-game.dart';
 import 'package:math_cow/screens/game/flip_game.dart';
 import 'package:math_cow/screens/game/tinder-card.dart';
+import 'package:math_cow/screens/game/training.dart';
 
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:math_cow/data/services/question_service..dart';
@@ -35,8 +36,11 @@ class GamePage extends StatelessWidget {
                   onIdle: () => Text("idle"),
                   onWaiting: () => Center(child: Loading()),
                   onData: (store) {
+                    //traininig yukarda olmalı yoksa suffle edilmiş sorualrdan alıyor
+                    var trainingQ = store.trainingQuestions;
                     var questions = store.questions;
-                    return _gameStack(context, store, questions);
+
+                    return _gameStack(context, store, questions, trainingQ);
                   }, //FlipGame(), //
                   onError: (_) => Text("error"),
                 );
@@ -44,8 +48,8 @@ class GamePage extends StatelessWidget {
             )));
   }
 
-  Stack _gameStack(
-      BuildContext context, QuestionService store, List<Question> questions) {
+  Stack _gameStack(BuildContext context, QuestionService store,
+      List<Question> questions, trainigQ) {
     final ReactiveModel<QuestionService> questionModelRM =
         Injector.getAsReactive<QuestionService>(context: context);
     // var questions = store.questions;
@@ -58,6 +62,10 @@ class GamePage extends StatelessWidget {
     //   Offset(media.width / 2, media.height * 6 / 7 - media.width / 3)
     // ]..shuffle();
     var gameList = [
+      FlipGame(
+        questions: questions,
+        store: store,
+      ),
       DragDropGame(
         store: store,
         questions: questions,
@@ -78,7 +86,12 @@ class GamePage extends StatelessWidget {
             ? Stack(
                 alignment: AlignmentDirectional.center,
                 children: <Widget>[
-                  gameList[0],
+                  store.training
+                      ? Training(
+                          trainingQuestions: trainigQ,
+                          store: store,
+                        )
+                      : gameList[0],
                   Positioned(
                     bottom: 20,
                     right: 20,
@@ -145,65 +158,68 @@ class GamePage extends StatelessWidget {
         transitionDuration: const Duration(milliseconds: 400),
         pageBuilder: (BuildContext context, Animation animation,
             Animation secondaryAnimation) {
-          return Center(
-            child: Container(
-              width: MediaQuery.of(context).size.width * .6,
-              height: MediaQuery.of(context).size.height * .5,
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.purple[900],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 250,
-                    height: 200,
-                    child: FlareActor(
-                      store.correctCounter == 2
-                          ? "animations/congrats.flr"
-                          : "animations/fail.flr",
-                      alignment: Alignment.center,
-                      fit: BoxFit.contain,
-                      sizeFromArtboard: true,
-                      animation:
-                          store.correctCounter == 2 ? "Untitled" : "patlama",
-                      callback: (a) {
-                        // questionModelRM.setState((state) {
-                        //   state.addUserData();
-                        // });
-                        Navigator.of(context)
-                            .popUntil(ModalRoute.withName('/'));
-                        // Navigator.of(context).pushNamedAndRemoveUntil(
-                        //     '/app', ModalRoute.withName("/app"));
+          return WillPopScope(
+            onWillPop: () {},
+            child: Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width * .6,
+                height: MediaQuery.of(context).size.height * .5,
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.purple[900],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 250,
+                      height: 200,
+                      child: FlareActor(
+                        store.correctCounter == 5
+                            ? "animations/congrats.flr"
+                            : "animations/fail.flr",
+                        alignment: Alignment.center,
+                        fit: BoxFit.contain,
+                        sizeFromArtboard: true,
+                        animation:
+                            store.correctCounter == 5 ? "Untitled" : "patlama",
+                        callback: (a) {
+                          // questionModelRM.setState((state) {
+                          //   state.addUserData();
+                          // });
+                          // Navigator.of(context)
+                          //     .popUntil(ModalRoute.withName('/'));
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/', ModalRoute.withName("/game"));
 
-                        // Navigator.pop(context);
-                      },
+                          // Navigator.pop(context);
+                        },
+                      ),
                     ),
-                  ),
-                  // Text(
-                  //   "You Just Finished a Card",
-                  //   style: TextStyle(fontSize: 16, inherit: false),
-                  // ),
-                  Text(
-                    store.correctCounter == 2 ? "Congrats" : "Try Again",
-                    style: TextStyle(fontSize: 20, inherit: false),
-                  ),
-                  // RaisedButton(
-                  //   onPressed: () {
-                  //     // Navigator.popUntil(context, predicate); ile home gidilebilir
-                  //     Navigator.popUntil(
-                  //         context, ModalRoute.withName('/second'));
-                  //     //Navigator.of(context).pop();
-                  //   },
-                  //   child: Text(
-                  //     "Back to the Cards",
-                  //     style: TextStyle(color: Colors.white),
-                  //   ),
-                  //   color: const Color(0xFF1BC0C5),
-                  // )
-                ],
+                    // Text(
+                    //   "You Just Finished a Card",
+                    //   style: TextStyle(fontSize: 16, inherit: false),
+                    // ),
+                    Text(
+                      store.correctCounter == 5 ? "Congrats" : "Try Again",
+                      style: TextStyle(fontSize: 20, inherit: false),
+                    ),
+                    // RaisedButton(
+                    //   onPressed: () {
+                    //     // Navigator.popUntil(context, predicate); ile home gidilebilir
+                    //     Navigator.popUntil(
+                    //         context, ModalRoute.withName('/second'));
+                    //     //Navigator.of(context).pop();
+                    //   },
+                    //   child: Text(
+                    //     "Back to the Cards",
+                    //     style: TextStyle(color: Colors.white),
+                    //   ),
+                    //   color: const Color(0xFF1BC0C5),
+                    // )
+                  ],
+                ),
               ),
             ),
           );

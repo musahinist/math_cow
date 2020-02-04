@@ -7,7 +7,7 @@ class BottomNavBar extends StatelessWidget {
 
   final List<TabItem> items = <TabItem>[
     //3 or 5
-    TabItem(icon: Icons.games, title: 'Topics'),
+    TabItem(icon: Icons.games, title: 'Games'),
     TabItem(icon: Icons.whatshot, title: 'Motivation'),
     TabItem(icon: Icons.face, title: 'Profile')
   ];
@@ -17,7 +17,7 @@ class BottomNavBar extends StatelessWidget {
     //https://pub.dev/packages/convex_bottom_ban
     return ConvexAppBar(
       onTap: (i) => setIndex(i),
-      backgroundColor: Colors.lightGreen,
+      backgroundColor: Colors.cyan,
       color: Colors.grey[800],
       // activeColor: Colors.amber[800],
       curve: Curves.decelerate,

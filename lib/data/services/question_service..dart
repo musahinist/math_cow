@@ -7,6 +7,9 @@ class QuestionService {
   QuestionApi _qapi;
   UserApi _uapi = UserApi();
   QuestionService({QuestionApi qapi}) : _qapi = qapi;
+  List isFlipCorrect = [];
+
+  bool training = true;
   String _feedback;
   String _cardID;
   String _topicID;
@@ -29,10 +32,11 @@ class QuestionService {
   String get feedBack =>
       _feedback = correctCounter == 20 ? "Congrats" : "Try Again";
   int get points => _points =
-      correctCounter <= wrongCounter ? (correctCounter - wrongCounter) * 3 : 0;
+      correctCounter > wrongCounter ? (correctCounter - wrongCounter) * 3 : 0;
   int get index => _index;
   String get cardID => _cardID;
   String get topicID => _topicID;
+  List get trainingQuestions => _questions[0].trainingQuestion;
   bool get isDragCompleted => _isDragCompleted;
   bool get isAnswerCorrect => _isAnswerCorrect;
   List get questionsAnswerList => _questionsAnswerList;
@@ -40,6 +44,7 @@ class QuestionService {
   Question get question => _question;
 
   ///SETTER
+
   pushAnswerToList(String qID, bool isCorrect) {
     _questionsAnswerList.add({"question_id": qID, "isCorrect": isCorrect});
   }
@@ -78,7 +83,7 @@ class QuestionService {
   Future addUserData() async {
     data = {
       "user_id": userID,
-      "points": _points,
+      "points": points,
       "correctQuestions": correctCounter,
       "wrongQuestions": wrongCounter,
       "finishedCards": [

@@ -8,6 +8,7 @@ import 'package:math_cow/data/services/topic_service.dart';
 import 'package:math_cow/data/services/user_service.dart';
 import 'package:math_cow/screens/discovery/discovery.dart';
 import 'package:math_cow/screens/game/flip_game.dart';
+import 'package:math_cow/screens/game/game.dart';
 import 'package:math_cow/screens/home/home.dart';
 import 'package:math_cow/screens/profile/profile.dart';
 import 'package:math_cow/utils/draw_svg.dart';
@@ -36,13 +37,16 @@ class MyApp extends StatelessWidget {
       home: App(),
       // initialRoute: '/app',
 
-      // routes: {
-      //   // When navigating to the "/" route, build the FirstScreen widget.
-      //   '/login': (BuildContext context) => LogIn(),
-      //   // When navigating to the "/second" route, build the SecondScreen widget.
-      //   '/app': (BuildContext context) => App(),
-      //   '/home': (BuildContext context) => HomePage(),
-      // },
+      routes: {
+        '/game': (BuildContext context) => GamePage(
+              id: null,
+            ),
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/login': (BuildContext context) => LogIn(),
+        // When navigating to the "/second" route, build the SecondScreen widget.
+        '/app': (BuildContext context) => App(),
+        '/home': (BuildContext context) => HomePage(),
+      },
     );
   }
 }

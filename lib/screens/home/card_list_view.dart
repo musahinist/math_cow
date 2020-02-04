@@ -40,17 +40,19 @@ class CardListView extends StatelessWidget {
               children: <Widget>[
                 ListView(
                   physics: BouncingScrollPhysics(),
-                  children: List<Widget>.generate(store.topics.length,
-                      (i) => _buildTopicsWithData(store.topics[i], store, i))
+                  children: List<Widget>.generate(
+                      store.topics.length,
+                      (i) => _buildTopicsWithData(
+                          context, store.topics[i], store, i))
                     ..insert(0, _hero(context, store)),
                 ),
                 TransAppBar(
-                  licon: Icons.toys,
-                  ltext: "${store.me.finishedCards.length} Card" ??
+                  licon: Icons.featured_play_list,
+                  ltext: "${store.me.finishedCards.length}" ??
                       "0", //"${store.me.name}",
-                  ctext: "TOPICS",
-                  rtext: "03:00",
-                  ricon: Icons.timelapse,
+                  ctext: "GAMES",
+                  rtext: "${store.me.points}",
+                  ricon: Icons.monetization_on,
                 ),
               ],
             ),
@@ -91,10 +93,6 @@ class CardListView extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  ProgressIndic(cpercent: Random().nextInt(10)),
-                  SizedBox(
-                    height: 20,
-                  ),
 
                   // roundedButton(
                   //     title: "Continue",
@@ -109,7 +107,8 @@ class CardListView extends StatelessWidget {
         ),
       );
 
-  Widget _buildTopicsWithData(Topic data, TopicService store, int i) {
+  Widget _buildTopicsWithData(
+      BuildContext context, Topic data, TopicService store, int i) {
     return FadeAnimation(
       0.2,
       Container(
@@ -120,7 +119,7 @@ class CardListView extends StatelessWidget {
               title: Text(data.topicName),
             ),
             Container(
-              height: 120.0,
+              height: MediaQuery.of(context).size.height * 0.2,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 physics: BouncingScrollPhysics(),
@@ -176,14 +175,14 @@ class CardListView extends StatelessWidget {
                   (store.me.finishedCards.length == j &&
                       "${101 + i}" == store.me.finishedCards[j - 1].topicID)
               ? Colors.grey[800]
-              : Colors.grey[500],
+              : Colors.grey[600],
           borderRadius: BorderRadius.circular(5.0),
         ),
         padding: const EdgeInsets.all(20.0),
         margin: j == 0
             ? const EdgeInsets.only(left: 20.0)
             : const EdgeInsets.only(left: 10.0),
-        width: 160.0,
+        width: MediaQuery.of(context).size.width * 0.37,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,8 +205,8 @@ class CardListView extends StatelessWidget {
               color: store.me.finishedCards[j].accuracyPercentageInCard < 50
                   ? Colors.red
                   : Colors.amber[800]),
-          Text(store.me.finishedCards[j].accuracyPercentageInCard
-              .toStringAsFixed(1))
+          Text(
+              "${store.me.finishedCards[j].accuracyPercentageInCard.toStringAsFixed(0)}%")
         ],
       );
     } else if (j == 0) {
