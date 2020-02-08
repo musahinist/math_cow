@@ -41,6 +41,12 @@ class _FlipperCardState extends State<FlipperCard>
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Center(
       child: AnimatedBuilder(
@@ -54,8 +60,10 @@ class _FlipperCardState extends State<FlipperCard>
             onTap: _doAnim,
             child: IndexedStack(
               children: <Widget>[
-                buildCard(widget.trainingQ[0]),
-                buildCard(widget.trainingQ[1])
+                buildCard(
+                    widget.trainingQ[0], Colors.red, "svg/flip-gesture.svg"),
+                buildCard(
+                    widget.trainingQ[1], Colors.green, "svg/swap-gesture.svg")
               ],
               alignment: Alignment.center,
               index: _animationController.value < 0.5 ? 0 : 1,
@@ -66,13 +74,19 @@ class _FlipperCardState extends State<FlipperCard>
     );
   }
 
-  Widget buildCard(String value) {
-    return Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(
+  Widget buildCard(String value, Color color, String svg) {
+    return Container(
+      decoration: BoxDecoration(
+        color: color,
         borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          new BoxShadow(
+            color: Colors.black26,
+            offset: new Offset(2.0, 2.0),
+            blurRadius: 8.0,
+          )
+        ],
       ),
-      color: Colors.red,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
@@ -88,15 +102,9 @@ class _FlipperCardState extends State<FlipperCard>
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               SvgPicture.asset(
-                "svg/flip-gesture.svg",
+                svg,
                 allowDrawingOutsideViewBox: true,
-                color: Colors.black45,
-                height: 60,
-              ),
-              SvgPicture.asset(
-                "svg/swap-gesture.svg",
-                allowDrawingOutsideViewBox: true,
-                color: Colors.black45,
+                color: Colors.black.withAlpha(60),
                 height: 60,
               ),
             ],
@@ -105,7 +113,62 @@ class _FlipperCardState extends State<FlipperCard>
       ),
     );
   }
+// Widget buildCardOne(String front, Color color) {
+//     return Padding(
+//       padding: const EdgeInsets.all(8.0),
+//       child: Container(
+//         decoration: BoxDecoration(
+//           color: color,
+//           borderRadius: BorderRadius.circular(5.0),
+//           boxShadow: [
+//             new BoxShadow(
+//               color: Colors.black26,
+//               offset: new Offset(2.0, 2.0),
+//               blurRadius: 8.0,
+//             )
+//           ],
+//         ),
+//         child: Center(
+//             child: SvgPicture.string(
+//           front,
+//           allowDrawingOutsideViewBox: true,
+//           fit: BoxFit.cover,
+//           width: 50,
+//         )),
+//       ),
+//     );
+//   }
 
+//   Widget buildCardTwo(String total, Color color) {
+//     return Padding(
+//       padding: const EdgeInsets.all(8.0),
+//       child: Container(
+//         color: color,
+//         // decoration: BoxDecoration(
+//         //   color: color,
+//         //   borderRadius: BorderRadius.circular(5.0),
+//         //   boxShadow: [
+//         //     new BoxShadow(
+//         //       color: Colors.black26,
+//         //       offset: new Offset(2.0, 2.0),
+//         //       blurRadius: 8.0,
+//         //     )
+//         //   ],
+//         // ),
+//         child: Center(
+//           child: Text(
+//             "$total",
+//             style: TextStyle(
+//               color: Colors.white,
+//               fontWeight: FontWeight.bold,
+//               fontSize: 35.0,
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 //   Widget buildCardTwo(String back) {
 //     return Card(
 //       color: Colors.teal,

@@ -2,8 +2,8 @@ class User {
   String location;
   bool isAdmin;
   bool isGold;
-  int points;
-  int coins;
+  num points;
+  num coins;
   int correctQuestions;
   int wrongQuestions;
   num accuracyPercentage;

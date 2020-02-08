@@ -82,8 +82,8 @@ class _AppState extends State<App> {
     // FingerPaint(),
     HomePage(),
 
-    AppStateBuilderEx(),
-    // DiscoveryPage(),
+    // AppStateBuilderEx(),
+    DiscoveryPage(),
     ProfilePage(),
 
     FlipGame(),

@@ -1,151 +1,173 @@
 import 'package:flutter/material.dart';
 import 'package:math_cow/components/app_bar.dart';
+
+import 'package:math_cow/utils/loading_anim.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:math_cow/data/services/user_service.dart';
 
 class DiscoveryPage extends StatelessWidget {
-  final UserService store;
-  DiscoveryPage(this.store);
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Scaffold(
-          body: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  colors: [Colors.teal[600], Colors.lime[300]]),
-            ),
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 40,
-                ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "Leadership",
-                        // style: TextStyle(color: Colors.white, fontSize: 40),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 200,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          _buildCircleavatar(1),
-                          Text(
-                            store.users[1].name,
-                            style: TextStyle(
-                                color: Colors.grey[50],
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "PRO",
-                            style: TextStyle(
-                                color: Colors.grey[100],
-                                fontWeight: FontWeight.bold),
-                          ),
-                          _roundedButton(
-                              title: "1000",
-                              color: Colors.lime[500],
-                              margin: 10,
-                              padding: 10),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          _buildCircleavatar(0),
-                          Text(
-                            store.users[0].name,
-                            style: TextStyle(
-                                color: Colors.grey[50],
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "PRO",
-                            style: TextStyle(
-                                color: Colors.grey[100],
-                                fontWeight: FontWeight.bold),
-                          ),
-                          _roundedButton(
-                              title: "1000",
-                              color: Colors.lime[500],
-                              margin: 10,
-                              padding: 10),
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          _buildCircleavatar(2),
-                          Text(
-                            store.users[2].name,
-                            style: TextStyle(
-                                color: Colors.grey[50],
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "PRO",
-                            style: TextStyle(
-                                color: Colors.grey[100],
-                                fontWeight: FontWeight.bold),
-                          ),
-                          _roundedButton(
-                              title: "1000",
-                              color: Colors.lime[500],
-                              margin: 10,
-                              padding: 10),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Expanded(
-                  child: Container(
+    return Injector(
+        inject: [
+          Inject<UserService>(() => UserService()),
+        ],
+        initState: () {
+          final ReactiveModel<UserService> topicModelRM =
+              Injector.getAsReactive<UserService>();
+          topicModelRM.setState(
+            (state) async => await state.getUsers(),
+          );
+        },
+        builder: (context) {
+          return Stack(
+            children: <Widget>[
+              Scaffold(
+                body: Container(
                     width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(40),
-                            topRight: Radius.circular(40))),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        physics: BouncingScrollPhysics(),
-                        itemCount: store.users.length,
-                        itemBuilder: _buildList,
+                    decoration: BoxDecoration(color: Colors.teal[600]
+                        // gradient: LinearGradient(
+                        //     begin: Alignment.topCenter,
+                        //     colors: [Colors.teal[600], Colors.lime[300]]),
+                        ),
+                    child: WhenRebuilder<UserService>(
+                      models: [Injector.getAsReactive<UserService>()],
+                      onIdle: () => Text("idle"),
+                      onError: (_) => Text("error"),
+                      onWaiting: () => Center(child: Loading()),
+                      onData: (store) => Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 40,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "Leadership",
+                                  // style: TextStyle(color: Colors.white, fontSize: 40),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            height: 200,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    _buildCircleavatar(1),
+                                    Text(
+                                      store.users[1].name,
+                                      overflow: TextOverflow.clip,
+                                      style: TextStyle(
+                                          color: Colors.grey[50],
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      "PRO",
+                                      style: TextStyle(
+                                          color: Colors.grey[100],
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    _roundedButton(
+                                        title: "1000",
+                                        color: Colors.lime[500],
+                                        margin: 10,
+                                        padding: 10),
+                                  ],
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    _buildCircleavatar(0),
+                                    Text(
+                                      store.users[0].name,
+                                      overflow: TextOverflow.clip,
+                                      style: TextStyle(
+                                          color: Colors.grey[50],
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      "PRO",
+                                      style: TextStyle(
+                                          color: Colors.grey[100],
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    _roundedButton(
+                                        title: "1000",
+                                        color: Colors.lime[500],
+                                        margin: 10,
+                                        padding: 10),
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    _buildCircleavatar(2),
+                                    Text(
+                                      store.users[2].name,
+                                      overflow: TextOverflow.clip,
+                                      style: TextStyle(
+                                          color: Colors.grey[50],
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      "PRO",
+                                      style: TextStyle(
+                                          color: Colors.grey[100],
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    _roundedButton(
+                                        title: "1000",
+                                        color: Colors.lime[500],
+                                        margin: 10,
+                                        padding: 10),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Expanded(
+                            child: Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(40),
+                                      topRight: Radius.circular(40))),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                child: ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  physics: BouncingScrollPhysics(),
+                                  itemCount: store.users.length,
+                                  itemBuilder: (context, index) =>
+                                      _buildList(context, index, store),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-        TransAppBar(
-          licon: Icons.toys,
-          ltext: " 25 Cards",
-          ctext: "DISCOVERY",
-          rtext: "03:00",
-          ricon: Icons.timelapse,
-        ),
-      ],
-    );
+                    )),
+              ),
+              TransAppBar(
+                licon: Icons.toys,
+                ltext: " 25 Cards",
+                ctext: "DISCOVERY",
+                rtext: Text("data"),
+                ricon: Icons.timelapse,
+              ),
+            ],
+          );
+        });
   }
 
   Padding _buildCircleavatar(int index) {
@@ -172,7 +194,7 @@ class DiscoveryPage extends StatelessWidget {
     );
   }
 
-  Widget _buildList(BuildContext context, int index) {
+  Widget _buildList(BuildContext context, int index, UserService store) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(

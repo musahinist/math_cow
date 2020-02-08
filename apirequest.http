@@ -1,4 +1,4 @@
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTMwYWU0MzQ2YjIxNjAwMDQ4NTNkNjUiLCJlbWFpbCI6Imd1ZXN0MTU4MDI0ODY0MzQzMUBtYXRoY293LmNvbSIsImlzQWRtaW4iOmZhbHNlLCJpc0dvbGQiOmZhbHNlLCJpYXQiOjE1ODAyNDg2NDN9.YqWzQhfItAYEOgt2w7wOt_RoBIS1xkKFKNpN5Pk35Vw
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTNkNmU2NTU4MWIwODAwMDQ1NmE2M2EiLCJuYW1lIjoiZ3Vlc3QxNTgxMDg0MjYxMTY3IiwiZW1haWwiOiJndWVzdDE1ODEwODQyNjExNjdAbWF0aGNvdy5jb20iLCJpc0FkbWluIjpmYWxzZSwiaXNHb2xkIjpmYWxzZSwiaWF0IjoxNTgxMDg0MjYxfQ.kqcVrTBeMonMyFpLj4bZEcsCYbHa_r0yKGnJ84klpNc
 @baseURL = http://mathcow.herokuapp.com/api
 
 ### 
@@ -8,11 +8,12 @@ content-type: application/json
 accept: application/json
 
 {
-    "userID": "5e289e950a8de50004d18d9f",
-    "points": 10,
-    "correctQuestions": 12,
+    "user_id": "5e3d6e65581b08000456a63a",
+    "remainingTime": 0,
+    "remainingTime": 12,
+    "correctQuestions": 12,   
     "wrongQuestions": 5,
-    "finishedCards": [{"topicID": "101", "cardID": "103"}]
+    "finishedCards": [{"topicID": "101", "cardID": "101"}]
 }
 
 

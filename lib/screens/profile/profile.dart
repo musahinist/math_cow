@@ -206,7 +206,7 @@ class ProfilePage extends StatelessWidget {
                             ltext:
                                 " ${store.me.finishedCards.length} Cards" + "",
                             ctext: "PROFILE",
-                            rtext: "03:00",
+                            rtext: Text("data"),
                             ricon: Icons.timelapse,
                           ),
                           // AppBar(

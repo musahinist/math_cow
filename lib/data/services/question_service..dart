@@ -17,7 +17,8 @@ class QuestionService {
   bool _isAnswerCorrect = false;
   int correctCounter = 0;
   int wrongCounter = 0;
-  int _points;
+  int remainingTime = 0;
+
   //String qID;
   List _questionsAnswerList = [];
   int _index = 0;
@@ -31,8 +32,8 @@ class QuestionService {
   ///GETTER
   String get feedBack =>
       _feedback = correctCounter == 20 ? "Congrats" : "Try Again";
-  int get points => _points =
-      correctCounter > wrongCounter ? (correctCounter - wrongCounter) * 3 : 0;
+  // int get points => _points =
+  //     correctCounter > wrongCounter ? (correctCounter - wrongCounter) * 3 : 0;
   int get index => _index;
   String get cardID => _cardID;
   String get topicID => _topicID;
@@ -83,7 +84,7 @@ class QuestionService {
   Future addUserData() async {
     data = {
       "user_id": userID,
-      "points": points,
+      "remainingTime": 0,
       "correctQuestions": correctCounter,
       "wrongQuestions": wrongCounter,
       "finishedCards": [

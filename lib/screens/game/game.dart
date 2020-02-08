@@ -6,6 +6,7 @@ import 'package:math_cow/screens/game/drag-drop-game.dart';
 import 'package:math_cow/screens/game/flip_game.dart';
 import 'package:math_cow/screens/game/tinder-card.dart';
 import 'package:math_cow/screens/game/training.dart';
+import 'package:math_cow/utils/count-down-timer.dart';
 
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:math_cow/data/services/question_service..dart';
@@ -17,6 +18,26 @@ import 'package:math_cow/utils/loading_anim.dart';
 class GamePage extends StatelessWidget {
   final String id;
   GamePage({Key key, @required this.id}) : super(key: key);
+  // int _start = 10;
+  // int _current = 10;
+
+  // void startTimer() {
+  //   CountdownTimer countDownTimer = new CountdownTimer(
+  //     new Duration(seconds: _start),
+  //     new Duration(seconds: 1),
+  //   );
+
+  //   var sub = countDownTimer.listen(null);
+  //   sub.onData((duration) {
+  //     _current = _start - duration.elapsed.inSeconds;
+  //     print(_current);
+  //   });
+
+  //   sub.onDone(() {
+  //     print("Done");
+  //     sub.cancel();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +100,7 @@ class GamePage extends StatelessWidget {
         TransAppBar(
           licon: Icons.arrow_back,
           ctext: "CARD ${store.cardID}",
-          rtext: "03:00",
+          rtext: CntdTimer(store: store),
           ricon: Icons.timelapse,
         ),
         store.isDragCompleted == false
@@ -109,7 +130,7 @@ class GamePage extends StatelessWidget {
                         Navigator.pop(context);
                       },
                     ),
-                  )
+                  ),
                 ],
               )
             : Center(
@@ -124,16 +145,16 @@ class GamePage extends StatelessWidget {
                   callback: (a) {
                     questionModelRM.setState(
                       (state) {
-                        if (store.index + 1 < 10 && store.correctCounter < 5) {
+                        if (store.correctCounter == 2 ||
+                            store.remainingTime == 0) {
+                          store.addUserData();
+                          return _showDialog(context, store);
+                        } else if (store.index + 1 < 4 &&
+                            store.correctCounter < 2) {
                           store.indexIncrement();
                           store.toggleDragCompleted(false);
                           store.toggleAnswerCorrect(false);
-                        } else if (store.correctCounter == 5) {
-                          store.points;
-                          store.addUserData();
-                          return _showDialog(context, store);
                         } else {
-                          store.points;
                           store.addUserData();
                           return _showDialog(context, store);
                         }
@@ -176,14 +197,14 @@ class GamePage extends StatelessWidget {
                       width: 250,
                       height: 200,
                       child: FlareActor(
-                        store.correctCounter == 5
+                        store.correctCounter == 2
                             ? "animations/congrats.flr"
                             : "animations/fail.flr",
                         alignment: Alignment.center,
                         fit: BoxFit.contain,
                         sizeFromArtboard: true,
                         animation:
-                            store.correctCounter == 5 ? "Untitled" : "patlama",
+                            store.correctCounter == 2 ? "Untitled" : "patlama",
                         callback: (a) {
                           // questionModelRM.setState((state) {
                           //   state.addUserData();
@@ -205,152 +226,118 @@ class GamePage extends StatelessWidget {
                       store.correctCounter == 5 ? "Congrats" : "Try Again",
                       style: TextStyle(fontSize: 20, inherit: false),
                     ),
-                    // RaisedButton(
-                    //   onPressed: () {
-                    //     // Navigator.popUntil(context, predicate); ile home gidilebilir
-                    //     Navigator.popUntil(
-                    //         context, ModalRoute.withName('/second'));
-                    //     //Navigator.of(context).pop();
-                    //   },
-                    //   child: Text(
-                    //     "Back to the Cards",
-                    //     style: TextStyle(color: Colors.white),
-                    //   ),
-                    //   color: const Color(0xFF1BC0C5),
-                    // )
                   ],
                 ),
               ),
             ),
           );
         });
-
-    // flutter defined function
-    // showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) {
-    //       return Dialog(
-    //         backgroundColor: Colors.white,
-    //         shape: RoundedRectangleBorder(
-    //             borderRadius: BorderRadius.circular(20.0)), //this right here
-    //         child: Container(
-    //           height: 200,
-    //           child: Padding(
-    //             padding: const EdgeInsets.all(12.0),
-    //             child: Column(
-    //               mainAxisAlignment: MainAxisAlignment.center,
-    //               crossAxisAlignment: CrossAxisAlignment.start,
-    //               children: [
-    //                 TextField(
-    //                   decoration: InputDecoration(
-    //                       border: InputBorder.none,
-    //                       hintText: 'What do you want to remember?'),
-    //                 ),
-    //                 SizedBox(
-    //                   width: 320.0,
-    //                   child: RaisedButton(
-    //                     onPressed: () {
-    //                       Navigator.of(context).pop();
-    //                     },
-    //                     child: Text(
-    //                       "Save",
-    //                       style: TextStyle(color: Colors.white),
-    //                     ),
-    //                     color: const Color(0xFF1BC0C5),
-    //                   ),
-    //                 )
-    //               ],
-    //             ),
-    //           ),
-    //         ),
-    //       );
-    //     });
   }
-  // Widget _buildDraggable(BuildContext context, Offset ofset, SVG svg) {
-  //   Size media = MediaQuery.of(context).size;
-  //   return Draggable(
-  //     maxSimultaneousDrags: 1,
-  //     ignoringFeedbackSemantics: false,
-  //     dragAnchor: DragAnchor.child,
-  //     child: buildBox(svg, media.width, media.width / 3 /*media.width * .36*/
-  //         ), //buildCircledBox(svg, media.width * .36, color: Colors.black12),
-  //     feedback: buildBox(svg, media.width, media.width / 3 /*media.width * .36*/
-  //         ),
-  //     childWhenDragging:
-  //         Container(), // buildCircledBox("+1", color:Colors.grey[300]),
-  //     data: "Musa", //can be list etc.
-  //     onDragStarted: () {},
-  //     onDragCompleted: () {
-  //       print("onDragCompleted");
-  //     },
-  //     onDragEnd: (details) {
-  //       print("onDragEnd Accept = " + details.wasAccepted.toString());
-  //       print("onDragEnd Velocity = " +
-  //           details.velocity.pixelsPerSecond.distance.toString());
-  //       print("onDragEnd Offeset= " + details.offset.direction.toString());
-  //     },
-  //     onDraggableCanceled: (Velocity velocity, Offset offset) {
-  //       print("onDraggableCanceled " + velocity.toString());
-  //     },
-  //   );
-  // }
-
-  // Widget _buildDragTargetWithData(BuildContext context, int index, Offset ofset,
-  //     QuestionService store, List<Question> questions) {
-  //   final ReactiveModel<QuestionService> questionModelRM =
-  //       Injector.getAsReactive<QuestionService>(context: context);
-  //   Size media = MediaQuery.of(context).size;
-  //   return Positioned(
-  //     top: ofset.dy,
-  //     left: ofset.dx,
-  //     child: DragTarget(
-  //       builder: (BuildContext context, List<String> candidateData,
-  //           List<dynamic> rejectedData) {
-  //         print("candidateData = " +
-  //             candidateData.toString() +
-  //             " , rejectedData = " +
-  //             rejectedData.toString());
-  //         return buildBox(SVG(questions[0].answers[index].answer),
-  //             media.width / 2, media.width / 3);
-  //       },
-  //       onWillAccept: (data) {
-  //         print("onWillAccept and data:$data");
-  //         return true; // return true or false. can use and/or
-  //       },
-  //       onAccept: (data) {
-  //         questionModelRM.setState((state) {
-  //           if (questions[0].answers[index].isCorrect) {
-  //             //store.correctCounter++;
-  //             // _counter < 10 ? _counter++ : _counter = 0;
-  //             store.toggleAnswerCorrect(true);
-  //             store.correctCounter++;
-  //             store.pushAnswerToList(questions[0].sId, true);
-  //           } else {
-  //             store.wrongCounter++;
-  //             store.pushAnswerToList(questions[0].sId, false);
-  //           }
-
-  //           store.toggleDragCompleted(true);
-  //         });
-
-  //         print("onAccept and data:$data counter:$store.counter");
-  //       },
-  //       onLeave: (data) {
-  //         print("onLeave and data:$data");
-  //       },
-  //     ),
-  //   );
-  // }
-
-  // Widget buildBox(SVG svg, double width, double height) {
-  //   return Container(
-  //       width: width,
-  //       height: height,
-  //       decoration: BoxDecoration(
-  //           //  borderRadius: BorderRadius.circular(size / 2),
-  //           // color: color,
-  //           ),
-  //       child: svg);
-  // }
-
 }
+
+// class CountDownTimer extends StatefulWidget {
+//   const CountDownTimer({
+//     Key key,
+//     int secondsRemaining,
+//     this.countDownTimerStyle,
+//     this.whenTimeExpires,
+//     this.countDownFormatter,
+//   })  : secondsRemaining = secondsRemaining,
+//         super(key: key);
+
+//   final int secondsRemaining;
+//   final Function whenTimeExpires;
+//   final Function countDownFormatter;
+//   final TextStyle countDownTimerStyle;
+
+//   State createState() => new _CountDownTimerState();
+// }
+
+// class _CountDownTimerState extends State<CountDownTimer>
+//     with TickerProviderStateMixin {
+//   AnimationController _controller;
+//   Duration duration;
+
+//   String get timerDisplayString {
+//     Duration duration = _controller.duration * _controller.value;
+//     return widget.countDownFormatter != null
+//         ? widget.countDownFormatter(duration.inSeconds)
+//         : formatHHMMSS(duration.inSeconds);
+//     // In case user doesn't provide formatter use the default one
+//     // for that create a method which will be called formatHHMMSS or whatever you like
+//   }
+
+//   String formatHHMMSS(int seconds) {
+//     int hours = (seconds / 3600).truncate();
+//     seconds = (seconds % 3600).truncate();
+//     int minutes = (seconds / 60).truncate();
+
+//     String hoursStr = (hours).toString().padLeft(2, '0');
+//     String minutesStr = (minutes).toString().padLeft(2, '0');
+//     String secondsStr = (seconds % 60).toString().padLeft(2, '0');
+
+//     if (hours == 0) {
+//       return "$minutesStr:$secondsStr";
+//     }
+
+//     return "$hoursStr:$minutesStr:$secondsStr";
+//   }
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     duration = new Duration(seconds: widget.secondsRemaining);
+//     _controller = new AnimationController(
+//       vsync: this,
+//       duration: duration,
+//     );
+//     _controller.reverse(from: widget.secondsRemaining.toDouble());
+//     _controller.addStatusListener((status) {
+//       if (status == AnimationStatus.completed ||
+//           status == AnimationStatus.dismissed) {
+//         widget.whenTimeExpires();
+//       }
+//     });
+//   }
+
+//   @override
+//   void didUpdateWidget(CountDownTimer oldWidget) {
+//     if (widget.secondsRemaining != oldWidget.secondsRemaining) {
+//       setState(() {
+//         duration = new Duration(seconds: widget.secondsRemaining);
+//         _controller.dispose();
+//         _controller = new AnimationController(
+//           vsync: this,
+//           duration: duration,
+//         );
+//         _controller.reverse(from: widget.secondsRemaining.toDouble());
+//         _controller.addStatusListener((status) {
+//           if (status == AnimationStatus.completed) {
+//             widget.whenTimeExpires();
+//           } else if (status == AnimationStatus.dismissed) {
+//             print("Animation Complete");
+//           }
+//         });
+//       });
+//     }
+//   }
+
+//   @override
+//   void dispose() {
+//     _controller.dispose();
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return new Center(
+//         child: AnimatedBuilder(
+//             animation: _controller,
+//             builder: (_, Widget child) {
+//               return Text(
+//                 timerDisplayString,
+//                 style: widget.countDownTimerStyle,
+//               );
+//             }));
+//   }
+// }

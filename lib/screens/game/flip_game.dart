@@ -160,7 +160,7 @@ class _FliperState extends State<Fliper> with SingleTickerProviderStateMixin {
                       widget.store.toggleAnswerCorrect(true);
                       ccount = 0;
                     } else {
-                      widget.store.correctCounter--;
+                      widget.store.wrongCounter++;
                     }
 
                     return widget.store.toggleDragCompleted(true);

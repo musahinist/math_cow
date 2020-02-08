@@ -29,6 +29,7 @@ class TopicApi {
       url,
       headers: {'x-auth-token': '$value'},
     );
+    print(response.statusCode);
     if (response.statusCode == 200) {
       return response.body;
     } else {

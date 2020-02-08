@@ -25,7 +25,7 @@ class QuestionApi {
       headers: {'x-auth-token': '$value'},
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      //  print(response.body);
       return parseQuestions(response.body);
     } else {
       throw Exception('Unable to fetch questions from the REST API');

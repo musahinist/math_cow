@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class TransAppBar extends StatelessWidget {
   final IconData licon, ricon;
-  final String ltext, rtext, ctext;
+  final String ltext, ctext;
+  final Widget rtext;
   final Function func;
   const TransAppBar(
       {Key key,
@@ -54,9 +55,7 @@ class TransAppBar extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Text(rtext ?? "",
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16)),
+                  rtext ?? Container(),
                   IconButton(
                     icon: Icon(ricon ?? Icons.timelapse),
                     onPressed: () {},

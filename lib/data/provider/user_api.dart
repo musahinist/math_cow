@@ -69,13 +69,14 @@ class UserApi {
 
   Future<String> getMe() async {
     _token = await read();
+    // print(_token);
     final response = await http.get(
       baseUrl + "/api/users/me",
       headers: {'x-auth-token': '$_token'},
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
+      print(response.statusCode);
       return response.body;
     } else {
       throw Exception('Unable to fetch users from the user API');
@@ -113,7 +114,7 @@ class UserApi {
       baseUrl + "/api/users",
       headers: {'x-auth-token': '$_token'},
     );
-
+    print("getUSers: ${response.statusCode}");
     if (response.statusCode == 200) {
       return _parseUsers(response.body);
     } else {

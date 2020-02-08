@@ -11,7 +11,7 @@ import 'package:swipe_stack/swipe_stack.dart';
 class Training extends StatelessWidget {
   List trainingQuestions;
   final store;
-
+  final GlobalKey<SwipeStackState> _swipeKey = GlobalKey<SwipeStackState>();
   Training({this.store, this.trainingQuestions});
   // Color color(SwiperPosition dir, double prgrs) {
   //   if (dir == SwiperPosition.Right) {
@@ -67,10 +67,10 @@ class Training extends StatelessWidget {
             },
           ).toList(),
           visibleCount: 2,
+          key: _swipeKey,
           maxAngle: 70,
           stackFrom: StackFrom.Bottom,
           translationInterval: 6,
-          historyCount: 1,
           scaleInterval: 0.03,
           onEnd: () {
             questionModelRM.setState(
@@ -93,7 +93,9 @@ class Training extends StatelessWidget {
           },
           onRewind: (int index, SwiperPosition position) =>
               debugPrint("onRewind $index $position"),
-          onSwipe: (int index, SwiperPosition position) {},
+          onSwipe: (int index, SwiperPosition position) {
+            _swipeKey.currentState.clearHistory();
+          },
         ),
       ],
     );

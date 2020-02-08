@@ -3,7 +3,6 @@ import 'package:math_cow/data/model/user.dart';
 import 'package:math_cow/data/provider/topic_api.dart';
 import 'package:math_cow/data/provider/user_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:connectivity/connectivity.dart';
 
 class TopicService {
   TopicApi _tapi;

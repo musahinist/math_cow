@@ -3,8 +3,7 @@ import 'package:math_cow/data/provider/user_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService {
-  UserApi _uapi;
-  UserService({UserApi uapi}) : _uapi = uapi;
+  UserApi _uapi = UserApi();
 
   List<User> _users;
   User _me;
@@ -14,7 +13,7 @@ class UserService {
 
   Future getUsers() async {
     _users = await _uapi.getUsers();
-    //   print("users name: ${_users.length}");
+    print("users name: ${_users.length}");
   }
 
   Future registerUser(name, email, password) async {

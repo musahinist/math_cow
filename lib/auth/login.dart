@@ -4,7 +4,6 @@ import 'package:math_cow/main.dart';
 import 'package:math_cow/utils/fade_animation.dart';
 import 'package:math_cow/utils/loading_anim.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
-import 'package:math_cow/data/provider/user_api.dart';
 
 class LogIn extends StatefulWidget {
   @override
@@ -23,7 +22,7 @@ class _LogInState extends State<LogIn> {
 
   Widget build(BuildContext context) {
     return Injector(
-        inject: [Inject<UserService>(() => UserService(uapi: UserApi()))],
+        inject: [Inject<UserService>(() => UserService())],
         initState: () {
           final ReactiveModel<UserService> userService =
               Injector.getAsReactive<UserService>();

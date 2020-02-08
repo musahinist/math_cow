@@ -1,5 +1,6 @@
 class Question {
-  List<int> layoutType;
+  String semanticQuestion;
+  String semanticAnswer;
   List<String> trainingQuestion;
   int correctNumber;
   int wrongNumber;
@@ -8,11 +9,13 @@ class Question {
   String topicID;
   String cardID;
   String questionID;
+  int layoutType;
   String question;
   List<Answers> answers;
 
   Question(
-      {this.layoutType,
+      {this.semanticQuestion,
+      this.semanticAnswer,
       this.trainingQuestion,
       this.correctNumber,
       this.wrongNumber,
@@ -21,11 +24,13 @@ class Question {
       this.topicID,
       this.cardID,
       this.questionID,
+      this.layoutType,
       this.question,
       this.answers});
 
   Question.fromJson(Map<String, dynamic> json) {
-    layoutType = json['layoutType'].cast<int>();
+    semanticQuestion = json['semanticQuestion'];
+    semanticAnswer = json['semanticAnswer'];
     trainingQuestion = json['trainingQuestion'].cast<String>();
     correctNumber = json['correctNumber'];
     wrongNumber = json['wrongNumber'];
@@ -34,6 +39,7 @@ class Question {
     topicID = json['topicID'];
     cardID = json['cardID'];
     questionID = json['questionID'];
+    layoutType = json['layoutType'];
     question = json['question'];
     if (json['answers'] != null) {
       answers = new List<Answers>();
@@ -45,7 +51,8 @@ class Question {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['layoutType'] = this.layoutType;
+    data['semanticQuestion'] = this.semanticQuestion;
+    data['semanticAnswer'] = this.semanticAnswer;
     data['trainingQuestion'] = this.trainingQuestion;
     data['correctNumber'] = this.correctNumber;
     data['wrongNumber'] = this.wrongNumber;
@@ -54,6 +61,7 @@ class Question {
     data['topicID'] = this.topicID;
     data['cardID'] = this.cardID;
     data['questionID'] = this.questionID;
+    data['layoutType'] = this.layoutType;
     data['question'] = this.question;
     if (this.answers != null) {
       data['answers'] = this.answers.map((v) => v.toJson()).toList();
