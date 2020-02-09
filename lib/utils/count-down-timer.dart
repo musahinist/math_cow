@@ -11,8 +11,8 @@ class CntdTimer extends StatefulWidget {
 }
 
 class _CntdTimerState extends State<CntdTimer> {
-  int _start = 50;
-  int _current = 50;
+  int _start = 120;
+  int _current = 120;
   var _sub;
   @override
   void initState() {

@@ -98,7 +98,7 @@ class DragDropGame extends StatelessWidget {
         },
         onAccept: (data) {
           questionModelRM.setState((state) {
-            if (questions[0].answers[index].isCorrect) {
+            if (/*questions[0].answers[index].isCorrect*/ index == 0) {
               //store.correctCounter++;
               // _counter < 10 ? _counter++ : _counter = 0;
               store.toggleAnswerCorrect(true);

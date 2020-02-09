@@ -3,9 +3,11 @@ import "package:flare_flutter/flare_actor.dart";
 
 import 'package:math_cow/data/model/question.dart';
 import 'package:math_cow/screens/game/drag-drop-game.dart';
-import 'package:math_cow/screens/game/flip_game.dart';
+import 'package:math_cow/screens/game/flip-game3.dart';
+
 import 'package:math_cow/screens/game/tinder-card.dart';
 import 'package:math_cow/screens/game/training.dart';
+
 import 'package:math_cow/utils/count-down-timer.dart';
 
 import 'package:states_rebuilder/states_rebuilder.dart';
@@ -83,15 +85,12 @@ class GamePage extends StatelessWidget {
     //   Offset(media.width / 2, media.height * 6 / 7 - media.width / 3)
     // ]..shuffle();
     var gameList = [
-      FlipGame(
-        questions: questions,
-        store: store,
-      ),
       DragDropGame(
         store: store,
         questions: questions,
       ),
       TinderCard(questions: questions[0], store: store),
+      FlipGame3(questions: questions, store: store),
       //FlipGame()
     ]..shuffle();
     return Stack(

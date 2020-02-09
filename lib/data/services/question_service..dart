@@ -84,7 +84,7 @@ class QuestionService {
   Future addUserData() async {
     data = {
       "user_id": userID,
-      "remainingTime": 0,
+      "remainingTime": remainingTime,
       "correctQuestions": correctCounter,
       "wrongQuestions": wrongCounter,
       "finishedCards": [
@@ -97,4 +97,3 @@ class QuestionService {
     return await _uapi.addUserData(body);
   }
 }
-//  {user_id: 5e30c7aad3b1950004b6942c, points: 6, correctQuestions: 2, wrongQuestions: 0, finishedCards: [{topicID: 101, cardID: 101}], finishedQuestions: [{question_id: 5e31df7154c0bf0004ba8394, isCorrect: true}, {question_id: 5e31ddb054c0bf0004ba8332, isCorrect: true}]}

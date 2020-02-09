@@ -7,7 +7,7 @@ import 'package:math_cow/data/provider/user_api.dart';
 import 'package:math_cow/data/services/topic_service.dart';
 import 'package:math_cow/data/services/user_service.dart';
 import 'package:math_cow/screens/discovery/discovery.dart';
-import 'package:math_cow/screens/game/flip_game.dart';
+
 import 'package:math_cow/screens/game/game.dart';
 import 'package:math_cow/screens/home/home.dart';
 import 'package:math_cow/screens/profile/profile.dart';
@@ -86,7 +86,6 @@ class _AppState extends State<App> {
     DiscoveryPage(),
     ProfilePage(),
 
-    FlipGame(),
     ScrollAnimation(),
   ];
   @override

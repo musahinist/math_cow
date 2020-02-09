@@ -1,27 +1,15 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:math_cow/components/app_bar.dart';
-import 'package:math_cow/components/circular_progress_indicator.dart';
-import 'package:math_cow/components/progress_indicator.dart';
 import 'package:math_cow/data/model/topic.dart';
-import 'package:math_cow/data/model/user.dart';
 import 'package:math_cow/data/provider/question_api.dart';
 import 'package:math_cow/data/services/question_service..dart';
 import 'package:math_cow/data/services/topic_service.dart';
-import 'package:math_cow/data/services/user_service.dart';
 import 'package:math_cow/screens/game/game.dart';
 import 'package:math_cow/utils/fade_animation.dart';
 import 'package:math_cow/utils/loading_anim.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 
 class CardListView extends StatelessWidget {
-  // final List<Question> topics;
-  // CardListView(this.qs);
-
-// final Future<List<Topic>>
-  // void setTopics() {
-  //   topics = api.getTopics();
-  // }
   int hj = 0;
   String hcardID = "101";
   String htopicID = "101";
@@ -57,8 +45,6 @@ class CardListView extends StatelessWidget {
   }
 
   Container _hero(BuildContext context, TopicService store) => Container(
-        // height: MediaQuery.of(context).size.height / 4,
-        // decoration: BoxDecoration(color: Colors.green),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -118,11 +104,10 @@ class CardListView extends StatelessWidget {
             ),
             Container(
               height: MediaQuery.of(context).size.height * 0.2,
-              child: ListView.builder(
+              child: ListView(
                 scrollDirection: Axis.horizontal,
                 physics: BouncingScrollPhysics(),
-                itemCount: data.cards.length,
-                itemBuilder: (context, j) {
+                children: List<Widget>.generate(data.cards.length, (j) {
                   var isOpen = store.me.finishedCards.any((value) =>
                       value.topicID == data.topicID &&
                       value.cardID == data.cards[j].cardID);
@@ -130,7 +115,17 @@ class CardListView extends StatelessWidget {
 
                   return _buildSubjectCard(context, matchTablo, j,
                       data.cards[j], data.topicID, store, i);
-                },
+                }),
+
+                // itemBuilder: (context, j) {
+                //   var isOpen = store.me.finishedCards.any((value) =>
+                //       value.topicID == data.topicID &&
+                //       value.cardID == data.cards[j].cardID);
+                //   matchTablo.add(isOpen);
+
+                //   return _buildSubjectCard(context, matchTablo, j,
+                //       data.cards[j], data.topicID, store, i);
+                // },
               ),
             ),
           ],
@@ -145,7 +140,6 @@ class CardListView extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (matchTablo[j] || matchTablo[before] || (j == 0)) {
-          this.index = 0;
           this.hj = j;
           this.hcardID = card.cardID;
           this.htopicID = topicID;
@@ -168,6 +162,7 @@ class CardListView extends StatelessWidget {
                     builder: (context) =>
                         GamePage(id: "$topicID/${card.cardID}"),
                   )));
+          this.index = 0;
         }
       },
       child: Container(
@@ -266,22 +261,4 @@ class CardListView extends StatelessWidget {
       },
     );
   }
-
-  // Widget roundedButton({String title, Color color, double margin = 0}) {
-  //   return InkWell(
-  //     onTap: () => print('hello'),
-  //     child: Container(
-  //       height: 50,
-  //       margin: EdgeInsets.only(right: margin),
-  //       decoration: BoxDecoration(
-  //           borderRadius: BorderRadius.circular(50), color: color),
-  //       child: Center(
-  //         child: Text(
-  //           title,
-  //           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }
