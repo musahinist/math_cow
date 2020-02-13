@@ -10,6 +10,7 @@ import 'package:math_cow/screens/discovery/discovery.dart';
 
 import 'package:math_cow/screens/game/game.dart';
 import 'package:math_cow/screens/home/home.dart';
+import 'package:math_cow/screens/profile/new-profile.dart';
 import 'package:math_cow/screens/profile/profile.dart';
 import 'package:math_cow/utils/draw_svg.dart';
 import 'package:math_cow/utils/exp_state_builder.dart';
@@ -38,9 +39,7 @@ class MyApp extends StatelessWidget {
       // initialRoute: '/app',
 
       routes: {
-        '/game': (BuildContext context) => GamePage(
-              id: null,
-            ),
+        '/game': (BuildContext context) => GamePage(),
         // When navigating to the "/" route, build the FirstScreen widget.
         '/login': (BuildContext context) => LogIn(),
         // When navigating to the "/second" route, build the SecondScreen widget.
@@ -78,14 +77,10 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   int _index;
   List<Widget> _page = [
-    //   Deneme(),
-    // FingerPaint(),
+    //  NProfile(),
     HomePage(),
-
-    // AppStateBuilderEx(),
     DiscoveryPage(),
     ProfilePage(),
-
     ScrollAnimation(),
   ];
   @override

@@ -79,6 +79,8 @@ class QuestionService {
 
   Future getQuestions(String cID) async {
     _questions = await _qapi.getQuestions(cID);
+    // print(cID);
+    // print(_questions);
   }
 
   Future addUserData() async {
@@ -88,7 +90,12 @@ class QuestionService {
       "correctQuestions": correctCounter,
       "wrongQuestions": wrongCounter,
       "finishedCards": [
-        {"topicID": _topicID, "cardID": _cardID}
+        {
+          "topicID": _topicID,
+          "cards": [
+            {"cardID": _cardID}
+          ]
+        }
       ],
       "finishedQuestions": questionsAnswerList
     };

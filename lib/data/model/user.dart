@@ -4,15 +4,16 @@ class User {
   bool isGold;
   num points;
   num coins;
-  int correctQuestions;
-  int wrongQuestions;
+  num level;
+  num correctQuestions;
+  num wrongQuestions;
   num accuracyPercentage;
   String sId;
   String name;
   String email;
+  // Avatar avatar;
   String lastOnline;
   List<FinishedCards> finishedCards;
-  List<FinishedQuestions> finishedQuestions;
 
   User(
       {this.location,
@@ -20,15 +21,16 @@ class User {
       this.isGold,
       this.points,
       this.coins,
+      this.level,
       this.correctQuestions,
       this.wrongQuestions,
       this.accuracyPercentage,
       this.sId,
       this.name,
       this.email,
+      //  this.avatar,
       this.lastOnline,
-      this.finishedCards,
-      this.finishedQuestions});
+      this.finishedCards});
 
   User.fromJson(Map<String, dynamic> json) {
     location = json['location'];
@@ -36,23 +38,20 @@ class User {
     isGold = json['isGold'];
     points = json['points'];
     coins = json['coins'];
+    level = json['level'];
     correctQuestions = json['correctQuestions'];
     wrongQuestions = json['wrongQuestions'];
     accuracyPercentage = json['accuracyPercentage'];
     sId = json['_id'];
     name = json['name'];
     email = json['email'];
+    // avatar =
+    //     json['avatar'] != null ? new Avatar.fromJson(json['avatar']) : null;
     lastOnline = json['lastOnline'];
     if (json['finishedCards'] != null) {
       finishedCards = new List<FinishedCards>();
       json['finishedCards'].forEach((v) {
         finishedCards.add(new FinishedCards.fromJson(v));
-      });
-    }
-    if (json['finishedQuestions'] != null) {
-      finishedQuestions = new List<FinishedQuestions>();
-      json['finishedQuestions'].forEach((v) {
-        finishedQuestions.add(new FinishedQuestions.fromJson(v));
       });
     }
   }
@@ -64,47 +63,92 @@ class User {
     data['isGold'] = this.isGold;
     data['points'] = this.points;
     data['coins'] = this.coins;
+    data['level'] = this.level;
     data['correctQuestions'] = this.correctQuestions;
     data['wrongQuestions'] = this.wrongQuestions;
     data['accuracyPercentage'] = this.accuracyPercentage;
     data['_id'] = this.sId;
     data['name'] = this.name;
     data['email'] = this.email;
+    // if (this.avatar != null) {
+    //   data['avatar'] = this.avatar.toJson();
+    // }
     data['lastOnline'] = this.lastOnline;
     if (this.finishedCards != null) {
       data['finishedCards'] =
           this.finishedCards.map((v) => v.toJson()).toList();
     }
-    if (this.finishedQuestions != null) {
-      data['finishedQuestions'] =
-          this.finishedQuestions.map((v) => v.toJson()).toList();
-    }
+    return data;
+  }
+}
+
+class Avatar {
+  String sId;
+  String avatarSvg;
+
+  Avatar({this.sId, this.avatarSvg});
+
+  Avatar.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    avatarSvg = json['avatarSvg'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['avatarSvg'] = this.avatarSvg;
     return data;
   }
 }
 
 class FinishedCards {
-  int correctInCard;
-  int wrongInCard;
-  num accuracyPercentageInCard;
+  List<Cards> cards;
   String sId;
   String topicID;
+
+  FinishedCards({this.cards, this.sId, this.topicID});
+
+  FinishedCards.fromJson(Map<String, dynamic> json) {
+    if (json['cards'] != null) {
+      cards = new List<Cards>();
+      json['cards'].forEach((v) {
+        cards.add(new Cards.fromJson(v));
+      });
+    }
+    sId = json['_id'];
+    topicID = json['topicID'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.cards != null) {
+      data['cards'] = this.cards.map((v) => v.toJson()).toList();
+    }
+    data['_id'] = this.sId;
+    data['topicID'] = this.topicID;
+    return data;
+  }
+}
+
+class Cards {
+  num correctInCard;
+  num wrongInCard;
+  num accuracyPercentageInCard;
+  String sId;
   String cardID;
 
-  FinishedCards(
+  Cards(
       {this.correctInCard,
       this.wrongInCard,
       this.accuracyPercentageInCard,
       this.sId,
-      this.topicID,
       this.cardID});
 
-  FinishedCards.fromJson(Map<String, dynamic> json) {
+  Cards.fromJson(Map<String, dynamic> json) {
     correctInCard = json['correctInCard'];
     wrongInCard = json['wrongInCard'];
     accuracyPercentageInCard = json['accuracyPercentageInCard'];
     sId = json['_id'];
-    topicID = json['topicID'];
     cardID = json['cardID'];
   }
 
@@ -114,27 +158,7 @@ class FinishedCards {
     data['wrongInCard'] = this.wrongInCard;
     data['accuracyPercentageInCard'] = this.accuracyPercentageInCard;
     data['_id'] = this.sId;
-    data['topicID'] = this.topicID;
     data['cardID'] = this.cardID;
-    return data;
-  }
-}
-
-class FinishedQuestions {
-  String questionId;
-  bool isCorrect;
-
-  FinishedQuestions({this.questionId, this.isCorrect});
-
-  FinishedQuestions.fromJson(Map<String, dynamic> json) {
-    questionId = json['question_id'];
-    isCorrect = json['isCorrect'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['question_id'] = this.questionId;
-    data['isCorrect'] = this.isCorrect;
     return data;
   }
 }

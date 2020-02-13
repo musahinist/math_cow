@@ -62,7 +62,7 @@ class DiscoveryPage extends StatelessWidget {
                                   children: <Widget>[
                                     _buildCircleavatar(1),
                                     Text(
-                                      store.users[1].name,
+                                      store.users[1].name.substring(0, 4),
                                       overflow: TextOverflow.clip,
                                       style: TextStyle(
                                           color: Colors.grey[50],
@@ -85,7 +85,7 @@ class DiscoveryPage extends StatelessWidget {
                                   children: <Widget>[
                                     _buildCircleavatar(0),
                                     Text(
-                                      store.users[0].name,
+                                      store.users[0].name.substring(0, 4),
                                       overflow: TextOverflow.clip,
                                       style: TextStyle(
                                           color: Colors.grey[50],
@@ -109,7 +109,7 @@ class DiscoveryPage extends StatelessWidget {
                                   children: <Widget>[
                                     _buildCircleavatar(2),
                                     Text(
-                                      store.users[2].name,
+                                      store.users[2].name.substring(0, 4),
                                       overflow: TextOverflow.clip,
                                       style: TextStyle(
                                           color: Colors.grey[50],

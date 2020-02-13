@@ -9,6 +9,8 @@ class TopicService {
   UserApi _uapi = UserApi();
   TopicService({TopicApi tapi}) : _tapi = tapi;
 
+  int i = 0;
+  int j = 0;
   List<Topic> _topics;
   User _me;
   String token;
@@ -20,7 +22,7 @@ class TopicService {
 
   Future getMainPageData() async {
     await getToken();
-    // print(token);
+    print(token);
     if (token == "") {
       await registerGuestUser();
     }

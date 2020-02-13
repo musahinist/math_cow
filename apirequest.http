@@ -1,4 +1,4 @@
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTNkNmU2NTU4MWIwODAwMDQ1NmE2M2EiLCJuYW1lIjoiZ3Vlc3QxNTgxMDg0MjYxMTY3IiwiZW1haWwiOiJndWVzdDE1ODEwODQyNjExNjdAbWF0aGNvdy5jb20iLCJpc0FkbWluIjpmYWxzZSwiaXNHb2xkIjpmYWxzZSwiaWF0IjoxNTgxMDg0MjYxfQ.kqcVrTBeMonMyFpLj4bZEcsCYbHa_r0yKGnJ84klpNc
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTQ1NmM4ZmQ5NDc3NjAwMDQzYzhmNTEiLCJuYW1lIjoiZ3Vlc3QxNTgxNjA4MDc5OTcxIiwiZW1haWwiOiJndWVzdDE1ODE2MDgwNzk5NzFAbWF0aGNvdy5jb20iLCJpc0FkbWluIjpmYWxzZSwiaXNHb2xkIjpmYWxzZSwiaWF0IjoxNTgxNjA4MDgwfQ.o_WmoeRIreZnQnYPQ-TMSe5eqPB1qMi-aLdp4LKi-Gc
 @baseURL = http://mathcow.herokuapp.com/api
 
 ### 
@@ -18,6 +18,6 @@ accept: application/json
 
 
 ### 
-GET {{baseURL}}/questions/101/101
+GET {{baseURL}}/users/me
 x-auth-token: {{token}}
 content-type: application/json
